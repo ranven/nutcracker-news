@@ -1,0 +1,24 @@
+<html>
+    {% if session.username %}
+    <p>You're logged in as {{ session.username }}</p>
+    <a href="/logout">Log out</a>
+{% else %}
+<form action="/signup" method="POST">
+    <label>Username</label><br/>
+    <input value="{{username}}" name="username" type="text"><br/>
+    <!-- todo: password requirements -->
+    <label>Password</label><br/>
+    <input name="password" type="password">
+    <br/>
+    <input type="submit" value="Sign up">
+</form>
+{% endif %}
+<div>
+    {% for message in get_flashed_messages() %}
+    <p>
+        {{ message }}
+    </p>
+    {% endfor %}
+</div>
+<a href="/login">Log in</a>
+</html>

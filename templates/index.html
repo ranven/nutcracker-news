@@ -1,4 +1,15 @@
 <html>
     <title>Home</title>
-    <h1>Welcome</h1>
+    <h1>Welcome
+        {% if session.username %}
+        {{session.username}}
+        {% endif %}
+    </h1>
+    {% if session.username %}
+    <a href="/logout">Log out</a>
+    {% else %}
+
+    <a href="/signup">Sign up</a>
+    <a href="/login">Log in</a>
+    {% endif %}
 </html>
