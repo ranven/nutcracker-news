@@ -2,13 +2,20 @@ from flask import Flask, flash
 from flask import render_template, request, session, redirect
 from flask_sqlalchemy import SQLAlchemy
 from os import getenv
+from sqlalchemy import text
 from werkzeug.security import check_password_hash, generate_password_hash
-
-
 app = Flask(__name__)
 app.secret_key = getenv("SECRET_KEY")
 app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DB_URL")
 db = SQLAlchemy(app)
+
+file = open('schema.sql', 'r')
+schema = file.read()
+file.close()
+
+app.app_context().push()
+db.session.execute(text(schema))
+db.session.commit()
 
 @app.route("/")
 def index():
