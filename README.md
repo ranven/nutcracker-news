@@ -13,6 +13,8 @@
   - User can upvote or downvote posts.
   - User can search for posts with keywords.
   - User can edit their posts and comments.
+  - User has an user profile page and they can edit their profile. 
+  - Users' posts and comments can be viewed from their profile pages.
   
 
  
