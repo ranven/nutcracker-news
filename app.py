@@ -5,7 +5,7 @@ from os import getenv
 app = Flask(__name__)
 app.secret_key = getenv("SECRET_KEY")
 
-import auth, db, posts
+import auth, db, posts, profiles
 
 @app.route("/")
 def index():
@@ -36,6 +36,7 @@ def signup():
         username = request.form["username"]
         password = request.form["password"]
         if auth.signup(username, password):
+            profiles.create_profile()
             flash("Successfully signed up!")
             return redirect("/posts") 
         else:
