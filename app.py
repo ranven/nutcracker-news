@@ -5,7 +5,7 @@ from os import getenv
 app = Flask(__name__)
 app.secret_key = getenv("SECRET_KEY")
 
-import auth, db
+import auth, db, posts
 
 @app.route("/")
 def index():
@@ -22,7 +22,7 @@ def login():
         
         if auth.login(username, password):
             flash("Login successful...")
-            return render_template("posts.html")
+            return redirect("/posts")
         else:
             flash("Invalid password or username.")
             redirect("/login")
@@ -37,7 +37,7 @@ def signup():
         password = request.form["password"]
         if auth.signup(username, password):
             flash("Successfully signed up!")
-            return render_template("/posts") 
+            return redirect("/posts") 
         else:
             flash("An error occurred. Please try again")
             return redirect("/signup")
@@ -47,3 +47,22 @@ def logout():
     auth.logout()
     return redirect("/")
 
+@app.route("/posts", methods=["POST", "GET"])
+def post():
+    if request.method == "GET":
+        all_posts = posts.get_posts()
+        return render_template("posts.html", posts=all_posts)
+    
+    if request.method == "POST":
+        user_id = auth.user_id()
+        title = request.form["title"]
+        content = request.form["content"]
+        if posts.submit_post(title, content, user_id):
+            flash("Post successfully created!")
+            return redirect("/posts")
+        else:
+            flash("You need an account to post.")
+            return redirect("login")
+
+#todo: move routes to own module
+#todo: refactor flash messages, currently buggy

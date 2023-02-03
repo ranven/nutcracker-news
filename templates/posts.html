@@ -1,0 +1,45 @@
+<html>
+    {% if session.username %}
+    <h1>Welcome
+        {{session.username}} </h1>
+    <div style="display: flex">
+        <a href="/logout">Log out</a>
+        {% else %}
+        
+        <a href="/signup">Sign up</a>
+        <a href="/login">Log in</a>
+        {% endif %}
+    </div>
+    <hr/>
+    <div>
+        {% if posts %}
+        {% for post in posts %}
+        <div>
+            <h1>
+                {{post.title}}
+            </h1>
+            <p>{{post.content}}</p>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p>No posts to display.</p>
+        {% endif %}
+    </div>
+    <hr/>
+    <h1>Make a post</h1>
+    <form action="/posts" method="POST">
+        <label>Post title</label><br/>
+        <input name="title" type="text"><br/>
+        <label>Content</label><br/>
+        <textarea name="content"></textarea>
+        <br/>
+        <input type="submit" value="Submit">
+    </form>
+    <div>
+    {% for message in get_flashed_messages() %}
+    <p>
+        {{ message }}
+    </p>
+    {% endfor %}
+    </div>
+</html>
