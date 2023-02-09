@@ -51,7 +51,7 @@ def logout():
 @app.route("/posts", methods=["POST", "GET"])
 def post():
     if request.method == "GET":
-        all_posts = posts.get_posts()
+        all_posts = posts.get_all_posts()
         return render_template("posts.html", posts=all_posts)
     
     if request.method == "POST":
@@ -64,6 +64,27 @@ def post():
         else:
             flash("You need an account to post.")
             return redirect("login")
+        
+@app.route("/me", methods=["POST", "GET"])
+def me():
+    if request.method == "GET":
+        user_id = auth.user_id()
+        if user_id == 0:
+            flash("You need an account to have a profile.")
+            return redirect("login")
+        profile = profiles.get_profile()
+        users_posts = posts.get_users_posts()
+        return render_template("profile.html", profile=profile, posts=users_posts)
+    
+    if request.method == "POST":
+        description = request.form["description"]
+        country = request.form["country"]
+        if profiles.update_profile(description, country):
+            flash("Profile successfully updated!")
+            return redirect("/me")
+        else:
+            flash("You need an account to do this.")
+            return redirect("login")
 
 #todo: move routes to own module
-#todo: refactor flash messages, currently buggy
+#todo: refactor flash messages and error handling, currently buggy
