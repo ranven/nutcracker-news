@@ -4,6 +4,7 @@
         {{session.username}} </h1>
     <div style="display: flex">
         <a href="/logout">Log out</a>
+        <a href="/posts">Posts</a>
         <a href="/users/{{session.user_id}}">My profile</a>
         {% else %}
         
@@ -19,6 +20,7 @@
             <h1>
                 {{post.title}}
             </h1>
+            <a href="/users/{{post.user_id}}">{{post.username}}</a>
             <p>{{post.content}}</p>
         </div>
         {% endfor %}

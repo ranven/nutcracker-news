@@ -3,7 +3,7 @@ from db import db
 import auth
 
 def get_all_posts():
-    sql = "SELECT p.post_id, p.title, p.content, p.created_at, u.username FROM POSTS p JOIN USERS u ON p.user_id = u.user_id"
+    sql = "SELECT p.post_id, p.title, p.content, p.created_at, u.user_id, u.username FROM POSTS p JOIN USERS u ON p.user_id = u.user_id"
     result = db.session.execute(sql)
     posts = result.fetchall()
     return posts
