@@ -8,8 +8,7 @@ def create_profile():
     db.session.execute(sql, {"user_id":user_id})
     db.session.commit()
     
-def get_profile():
-    user_id = auth.user_id()
+def get_profile(user_id):
     if user_id == 0:
         return False
     sql = "SELECT p.description, p.country, u.username FROM profiles p JOIN users u ON p.user_id = u.user_id WHERE u.user_id = :user_id"

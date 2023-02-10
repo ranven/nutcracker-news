@@ -4,7 +4,7 @@
         {{session.username}} </h1>
     <div style="display: flex">
         <a href="/logout">Log out</a>
-        <a href="/me">My profile</a>
+        <a href="/users/{{session.user_id}}">My profile</a>
         {% else %}
         
         <a href="/signup">Sign up</a>
@@ -14,13 +14,13 @@
     <hr/>
     <div>
         {% if profile %}
-            <h1>Your profile</h1>
-            <p>username: {{profile.username}}</p>
+            <h1>{{profile.username}}'s profile</h1>
             <p>description: {{profile.description}}</p>
             <p>country: {{profile.country}}</p>
             <hr/>
+            {% if admin %}
             <h1>Edit profile</h1>
-                <form action="/me" method="POST">
+                <form action="/users" method="POST">
                     <label>Description</label><br/>
                     <textarea name="description"></textarea><br/>
                     <label>Country</label><br/>
@@ -29,8 +29,9 @@
                     <input type="submit" value="Submit">
                 </form>
             <hr/>
+            {% endif %}
             {% if posts %}
-            <h1>Your posts</h1>
+            <h1>{{profile.username}}'s posts</h1>
                 {% for post in posts %}
                 <div>
                     <h1>

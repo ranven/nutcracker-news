@@ -65,26 +65,29 @@ def post():
             flash("You need an account to post.")
             return redirect("login")
         
-@app.route("/me", methods=["POST", "GET"])
-def me():
+@app.route("/users/<user_id>", methods=["POST", "GET"])
+def profile(user_id):
+    authenticated_user = auth.user_id()
+    is_admin = False
+
+    if int(user_id) == authenticated_user:
+        is_admin = True
+        
     if request.method == "GET":
-        user_id = auth.user_id()
-        if user_id == 0:
-            flash("You need an account to have a profile.")
-            return redirect("login")
-        profile = profiles.get_profile()
-        users_posts = posts.get_users_posts()
-        return render_template("profile.html", profile=profile, posts=users_posts)
+        profile = profiles.get_profile(user_id)
+        users_posts = posts.get_users_posts(user_id)
+        return render_template("profile.html", profile=profile, posts=users_posts, admin=is_admin)
     
     if request.method == "POST":
-        description = request.form["description"]
-        country = request.form["country"]
-        if profiles.update_profile(description, country):
-            flash("Profile successfully updated!")
-            return redirect("/me")
+        if is_admin:
+            description = request.form["description"]
+            country = request.form["country"]
+            if profiles.update_profile(description, country):
+                flash("Profile successfully updated!")
+                return redirect("/users/{user_id}")
         else:
-            flash("You need an account to do this.")
-            return redirect("login")
-
+            flash("You cannot edit someone else's profile.")
+            return redirect("/posts")
+        
 #todo: move routes to own module
 #todo: refactor flash messages and error handling, currently buggy

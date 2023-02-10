@@ -8,8 +8,7 @@ def get_all_posts():
     posts = result.fetchall()
     return posts
 
-def get_users_posts():
-    user_id = auth.user_id()
+def get_users_posts(user_id):
     sql = "SELECT title, content, created_at FROM posts WHERE user_id = :user_id"
     result = db.session.execute(sql, {"user_id":user_id})
     posts = result.fetchall()
