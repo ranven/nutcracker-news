@@ -5,7 +5,7 @@ from os import getenv
 app = Flask(__name__)
 app.secret_key = getenv("SECRET_KEY")
 
-import auth, db, posts, profiles
+import auth, db, posts, profiles, votes
 
 @app.route("/")
 def index():
@@ -50,15 +50,16 @@ def logout():
 
 @app.route("/posts", methods=["POST", "GET"])
 def post():
+    authenticated_user = auth.user_id()
     if request.method == "GET":
-        all_posts = posts.get_all_posts()
+        all_posts = posts.get_all_posts(authenticated_user)
+
         return render_template("posts.html", posts=all_posts)
     
     if request.method == "POST":
-        user_id = auth.user_id()
         title = request.form["title"]
         content = request.form["content"]
-        if posts.submit_post(title, content, user_id):
+        if posts.submit_post(title, content, authenticated_user):
             flash("Post successfully created!")
             return redirect("/posts")
         else:
@@ -88,6 +89,16 @@ def profile(user_id):
         else:
             flash("You cannot edit someone else's profile.")
             return redirect("/posts")
-        
+
+@app.route("/likes", methods=["POST"])
+def send_vote():
+    authenticated_user = auth.user_id()
+    post_id = request.form["post_id"]
+    vote_code = True if request.form["vote_button"] == "+1" else False
+    if votes.send_vote(authenticated_user, post_id, vote_code):
+        return redirect('/posts') 
+    else:
+        flash("err")
+        return redirect('/posts')
 #todo: move routes to own module
 #todo: refactor flash messages and error handling, currently buggy
