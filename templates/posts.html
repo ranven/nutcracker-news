@@ -19,7 +19,7 @@
             <a href="/users/{{post.user_id}}">{{post.username}}</a>
             <p>{{post.content}}</p>
             <a href="posts/{{post.post_id}}">
-                View post
+                {{post.comment_count}} comments
             </a>
         </div>
         {% endfor %}
