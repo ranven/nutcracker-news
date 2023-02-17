@@ -75,7 +75,7 @@ def send_comment(post_id):
     print(content)
     if comments.send_comment(authenticated_user, post_id, content):
         flash("Comment sent!")
-        return redirect("/posts/{post_id}")
+        return redirect("/posts/"+post_id)
     else:
         flash("You need an account to comment.")
         return redirect("login")
@@ -99,7 +99,7 @@ def profile(user_id):
             country = request.form["country"]
             if profiles.update_profile(description, country):
                 flash("Profile successfully updated!")
-                return redirect("/users/{user_id}")
+                return redirect("/users/"+user_id)
         else:
             flash("You cannot edit someone else's profile.")
             return redirect("/posts")
