@@ -1,7 +1,7 @@
 from app import app
 from flask import flash
 from flask import render_template, request, redirect
-import auth, posts, profiles, votes
+import auth, posts, profiles, votes, comments
 
 @app.route("/")
 def index():
@@ -49,7 +49,6 @@ def post():
     authenticated_user = auth.user_id()
     if request.method == "GET":
         all_posts = posts.get_all_posts(authenticated_user)
-
         return render_template("posts.html", posts=all_posts)
     
     if request.method == "POST":
@@ -66,8 +65,20 @@ def post():
 def get_post(post_id):
     authenticated_user = auth.user_id()
     post = posts.get_post(authenticated_user, post_id)
-    return render_template("post.html", post=post)
-    
+    post_comments = comments.get_comments(post_id)
+    return render_template("post.html", post=post, post_comments=post_comments)
+
+@app.route("/posts/<post_id>/comments", methods=["POST"])
+def send_comment(post_id):
+    authenticated_user = auth.user_id()
+    content = request.form["content"]
+    print(content)
+    if comments.send_comment(authenticated_user, post_id, content):
+        flash("Comment sent!")
+        return redirect("/posts/{post_id}")
+    else:
+        flash("You need an account to comment.")
+        return redirect("login")
         
 @app.route("/users/<user_id>", methods=["POST", "GET"])
 def profile(user_id):
@@ -103,5 +114,7 @@ def send_vote():
     else:
         flash("err")
         return redirect('/posts')
+
+   
 
 #todo: refactor flash messages and error handling, currently buggy

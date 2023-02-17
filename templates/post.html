@@ -25,6 +25,23 @@
         <p>This post doesn't exist...</p>
         {% endif %}
     </div>
+    <h1>Comments</h1>
+    {% for comment in post_comments %}
+    <div>
+        <hr/>
+        <a href="/users/{{comment.user_id}}">{{comment.username}}</a>
+        <p>{{comment.content}}</p>
+    </div>
+    {% endfor %}
+    {% if session.username %}
+    <div>
+        <form method="POST" action="/posts/{{post.post_id}}/comments">
+        <label>Content</label><br/>
+        <textarea name="content"></textarea>
+        <input type="submit" value="Submit">
+        </form>
+    </div>
+    {% endif %}
     <div>
     {% for message in get_flashed_messages() %}
     <p>
