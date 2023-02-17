@@ -62,6 +62,13 @@ def post():
             flash("You need an account to post.")
             return redirect("login")
         
+@app.route("/posts/<post_id>", methods=["GET"])
+def get_post(post_id):
+    authenticated_user = auth.user_id()
+    post = posts.get_post(authenticated_user, post_id)
+    return render_template("post.html", post=post)
+    
+        
 @app.route("/users/<user_id>", methods=["POST", "GET"])
 def profile(user_id):
     authenticated_user = auth.user_id()

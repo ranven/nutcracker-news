@@ -14,8 +14,8 @@
     </div>
     <hr/>
     <div>
-        {% if posts %}
-        {% for post in posts %}
+        <a href="/posts">◄</a>
+        {% if post %}
         <div>
             {% if session.username %}
             <form method="post" action="/likes">
@@ -30,25 +30,11 @@
             <p>{{ post.votes }} </p>
             <a href="/users/{{post.user_id}}">{{post.username}}</a>
             <p>{{post.content}}</p>
-            <a href="posts/{{post.post_id}}">
-                View post
-            </a>
         </div>
-        {% endfor %}
         {% else %}
-        <p>No posts to display.</p>
+        <p>This post doesn't exist...</p>
         {% endif %}
     </div>
-    <hr/>
-    <h1>Make a post</h1>
-    <form action="/posts" method="POST">
-        <label>Post title</label><br/>
-        <input name="title" type="text"><br/>
-        <label>Content</label><br/>
-        <textarea name="content"></textarea>
-        <br/>
-        <input type="submit" value="Submit">
-    </form>
     <div>
     {% for message in get_flashed_messages() %}
     <p>
