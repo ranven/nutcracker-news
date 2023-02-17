@@ -1,6 +1,4 @@
-from flask import session
 from db import db
-import auth
 
 def get_all_posts(user_id):
     if user_id == 0:
@@ -49,7 +47,6 @@ def get_post(user_id, post_id):
     return post
 
 def get_users_posts(user_id):
-    #todo: add votes
     sql = "SELECT title, content, created_at FROM posts WHERE user_id = :user_id"
     result = db.session.execute(sql, {"user_id":user_id})
     posts = result.fetchall()

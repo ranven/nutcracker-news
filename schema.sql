@@ -38,4 +38,4 @@ CREATE TABLE IF NOT EXISTS profiles(
 	description TEXT NOT NULL DEFAULT '',
 	country TEXT DEFAULT 'unknown',
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)
+);

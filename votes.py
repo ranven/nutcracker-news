@@ -1,6 +1,4 @@
-from flask import session
 from db import db
-import auth
 
 def send_vote(user_id, post_id, vote_code):
     if user_id == 0:
