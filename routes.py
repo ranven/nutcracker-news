@@ -5,7 +5,7 @@ import auth, posts, profiles, votes
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return redirect("/posts")
 
 @app.route("/login", methods=["POST", "GET"])
 def login():

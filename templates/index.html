@@ -1,17 +1,1 @@
-<html>
-    <title>Home</title>
-    <h1>Welcome
-        {% if session.username %}
-        {{session.username}}
-        {% endif %}
-    </h1>
-    {% if session.username %}
-    <a href="/logout">Log out</a>
-    <a href="/posts">Posts</a>
-    <a href="/users/{{session.user_id}}">My profile</a>
-    {% else %}
-
-    <a href="/signup">Sign up</a>
-    <a href="/login">Log in</a>
-    {% endif %}
-</html>
+{% extends "base.html" %}

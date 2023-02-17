@@ -1,18 +1,6 @@
+{% extends "base.html" %}
 <html>
-    {% if session.username %}
-    <h1>Welcome
-        {{session.username}} </h1>
-    <div style="display: flex">
-        <a href="/logout">Log out</a>
-        <a href="/posts">Posts</a>
-        <a href="/users/{{session.user_id}}">My profile</a>
-        {% else %}
-        
-        <a href="/signup">Sign up</a>
-        <a href="/login">Log in</a>
-        {% endif %}
-    </div>
-    <hr/>
+    {% block page_content %}
     <div>
         {% if profile %}
             <h1>{{profile.username}}'s profile</h1>
@@ -39,7 +27,7 @@
                         {{post.title}}
                     </h1>
                     <p>{{post.content}}</p>
-                    <a href="posts/{{post.post_id}}">
+                    <a href="/posts/{{post.post_id}}">
                         View post
                     </a>
                 </div>
@@ -58,4 +46,5 @@
     </p>
     {% endfor %}
     </div>
+    {% endblock %}
 </html>

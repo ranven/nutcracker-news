@@ -1,19 +1,19 @@
+{% extends "base.html" %}
 <html>
+    {% block page_content %}
     {% if session.username %}
     <p>You're logged in as {{ session.username }}</p>
-    <a href="/logout">Log out</a>
-    <a href="/posts">Posts</a>
-    <a href="/users/{{session.user_id}}">My profile</a>
-{% else %}
-<form action="/signup" method="POST">
-    <label>Username</label><br/>
-    <input value="{{username}}" name="username" type="text"><br/>
-    <!-- todo: password requirements -->
-    <label>Password</label><br/>
-    <input name="password" type="password">
-    <br/>
-    <input type="submit" value="Sign up">
-</form>
+    {% else %}
+    <h1>Sign up</h1>
+    <form action="/signup" method="POST">
+        <label>Username</label><br/>
+        <input value="{{username}}" name="username" type="text"><br/>
+        <!-- todo: password requirements -->
+        <label>Password</label><br/>
+        <input name="password" type="password">
+        <br/>
+        <input type="submit" value="Sign up">
+    </form>
 {% endif %}
 <div>
     {% for message in get_flashed_messages() %}
@@ -22,5 +22,5 @@
     </p>
     {% endfor %}
 </div>
-<a href="/login">Log in</a>
+{% endblock %}
 </html>

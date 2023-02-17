@@ -1,18 +1,6 @@
+{% extends "base.html" %}
 <html>
-    {% if session.username %}
-    <h1>Welcome
-        {{session.username}} </h1>
-    <div style="display: flex">
-        <a href="/logout">Log out</a>
-        <a href="/posts">Posts</a>
-        <a href="/users/{{session.user_id}}">My profile</a>
-        {% else %}
-        
-        <a href="/signup">Sign up</a>
-        <a href="/login">Log in</a>
-        {% endif %}
-    </div>
-    <hr/>
+    {% block page_content %}
     <div>
         {% if posts %}
         {% for post in posts %}
@@ -50,10 +38,11 @@
         <input type="submit" value="Submit">
     </form>
     <div>
-    {% for message in get_flashed_messages() %}
-    <p>
-        {{ message }}
+        {% for message in get_flashed_messages() %}
+        <p>
+            {{ message }}
     </p>
     {% endfor %}
-    </div>
+</div>
+{% endblock %}
 </html>
