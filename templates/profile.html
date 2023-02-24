@@ -11,9 +11,9 @@
             <h1>Edit profile</h1>
                 <form action="/users/{{session.user_id}}" method="POST">
                     <label>Description</label><br/>
-                    <textarea name="description"></textarea><br/>
+                    <textarea name="description" placeholder="{{profile.description}}"></textarea><br/>
                     <label>Country</label><br/>
-                    <input name="country" type="text">
+                    <input name="country" placeholder="{{profile.country}}" type="text">
                     <br/>
                     <input type="submit" value="Submit">
                 </form>
@@ -32,11 +32,29 @@
                     </a>
                 </div>
                 {% endfor %}
-                {% else %}
-                <p>No posts to display.</p>
-                {% endif %}
-                <hr/>
+            {% else %}
+            <p>No posts to display.</p>
+
         {% endif %}
+        {% if comments %}
+        <h1>{{profile.username}}'s comments</h1>
+            {% for comment in comments %}
+            <div>
+                <p>{{comment.content}}</p>
+                <a href="/posts/{{comment.post_id}}">
+                    View post
+                </a>
+                {%if admin%}
+                <form action="/comments/{{comment.comment_id}}" method="GET">
+                    <input type="submit" value="Edit comment">
+                </form>
+                {%endif%}
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No posts to display.</p>
+        {% endif %}
+    {% endif %}
     </div>
 
    <div>

@@ -91,7 +91,8 @@ def profile(user_id):
     if request.method == "GET":
         profile = profiles.get_profile(user_id)
         users_posts = posts.get_users_posts(user_id)
-        return render_template("profile.html", profile=profile, posts=users_posts, admin=is_admin)
+        users_comments = comments.get_users_comments(user_id)
+        return render_template("profile.html", profile=profile, posts=users_posts, comments=users_comments, admin=is_admin)
     
     if request.method == "POST":
         if is_admin:
@@ -115,6 +116,24 @@ def send_vote():
         flash("err")
         return redirect('/posts')
 
-   
+@app.route("/comments/<comment_id>", methods=["GET", "POST"])
+def modify_comment(comment_id):
+    authenticated_user = auth.user_id()
+    if request.method == "GET":
+        comment = comments.get_comment(comment_id)
+        return render_template("edit.html", comment=comment, post=None)
+    elif request.method == "POST":
+        method = request.form["method"]
+        if method == "delete":
+            if comments.delete_comment(comment_id, authenticated_user):
+                flash("Comment deleted!")
+                return redirect("/users/"+str(authenticated_user))
+        elif method == "put":
+            content = request.form["content"]
+            if len(content) > 0:
+                if comments.update_comment(comment_id, content, authenticated_user):
+                    flash("Comment updated!")
+                    return redirect("/comments/"+comment_id)
+        return redirect('/posts')
 
 #todo: refactor flash messages and error handling, currently buggy

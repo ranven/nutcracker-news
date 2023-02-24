@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+<html>
+    {% block page_content %}
+    {%if comment%}
+    <h2>Edit comment</h2>
+    <form method="POST" action="/comments/{{comment.comment_id}}">
+        <input type="hidden" name="method" value="put" />
+        <label>Content</label><br/>
+        <input name="content" type="text" value="{{comment.content}}">
+        <input type="submit" value="Submit">
+    </form>
+    <form method="POST" action="/comments/{{comment.comment_id}}">
+        <input type="hidden" name="method" value="delete" />
+        <input type="submit" value="Delete comment">
+    </form>
+    
+    {%endif%}
+    {%if post%}
+    <h2>Edit post</h2>
+    <form method="POST" action="/posts/{{post.post_id}}">
+        <input type="hidden" name="method" value="put" />
+        <input name="title" type="text" value="{{post.title}}">
+        <input name="content" type="textarea" value="{{post.content}}">
+        <input type="submit" value="Submit">
+    </form>
+    <form method="POST" action="/posts/{{post.post_id}}">
+        <input type="hidden" name="method" value="delete" />
+        <input type="submit" value="Delete post">
+    </form>
+    {%endif%}
+    <div>
+        {% for message in get_flashed_messages() %}
+        <p>
+            {{ message }}
+        </p>
+        {% endfor %}
+        </div>
+{% endblock %}
+</html>
