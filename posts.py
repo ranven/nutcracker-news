@@ -51,7 +51,7 @@ def get_post(user_id, post_id):
     return post
 
 def get_users_posts(user_id):
-    sql = "SELECT title, content, created_at, post_id FROM posts WHERE user_id = :user_id ORDER BY p.created_at DESC"
+    sql = "SELECT title, content, created_at, post_id FROM posts WHERE user_id = :user_id ORDER BY created_at DESC"
     result = db.session.execute(sql, {"user_id":user_id})
     posts = result.fetchall()
     return posts

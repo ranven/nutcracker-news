@@ -7,13 +7,13 @@ def get_comments(post_id):
     return comments
 
 def get_comment(comment_id):
-    sql = "SELECT c.content, c.created_at, c.edited_at, c.comment_id FROM comments c WHERE c.comment_id = :comment_id"
+    sql = "SELECT content, created_at, edited_at, comment_id FROM comments WHERE comment_id = :comment_id"
     result = db.session.execute(sql, {"comment_id": comment_id})
     comment = result.fetchone()
     return comment
 
 def get_users_comments(user_id):
-    sql = "SELECT c.comment_id, c.content, c.created_at, c.edited_at, c.post_id FROM comments c WHERE c.user_id = :user_id ORDER BY c.created_at DESC"
+    sql = "SELECT comment_id, content, created_at, edited_at, post_id FROM comments WHERE user_id = :user_id ORDER BY created_at DESC"
     result = db.session.execute(sql, {"user_id": user_id})
     comments = result.fetchall()
     return comments
