@@ -142,7 +142,7 @@ def modify_content(content_id, content_type):
                 if len(content) > 0:
                     if posts.update_post(content_id, content, title, authenticated_user):
                         flash("Post updated!")
-                        return redirect("/posts/"+content_id)
+                        return redirect("/edit/post/"+content_id)
                 
             case "post", "delete":
                 if posts.delete_post(content_id, authenticated_user):
@@ -154,11 +154,16 @@ def modify_content(content_id, content_type):
                 if len(content) > 0:
                     if comments.update_comment(content_id, content, authenticated_user):
                         flash("Comment updated!")
-                        return redirect("/comments/"+content_id)
+                        return redirect("/edit/comment/"+content_id)
                     
             case "comment", "delete":
                 if comments.delete_comment(content_id, authenticated_user):
                     flash("Comment deleted!")
                     return redirect("/users/"+str(authenticated_user))
-    
+
+#filter for timestamps
+@app.template_filter('datetimeformat')
+def datetime_format(value, format="%H:%M %d-%m-%y"):
+    return value.strftime(format)
+
 #todo: refactor flash messages and error handling, currently buggy

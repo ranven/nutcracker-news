@@ -14,6 +14,10 @@
                 <input type="submit" name="vote_button" value="-1">
             </form>
             {% endif %}
+            <p>Created: {{post.created_at|datetimeformat}}</p>
+            {% if post.created_at != post.edited_at %}
+            <p>Edited: {{post.edited_at|datetimeformat}}</p>
+            {% endif %}
             <h1>
                 {{post.title}}
             </h1>
@@ -29,8 +33,14 @@
     {% for comment in post_comments %}
     <div>
         <hr/>
+        {{comment.created_at|datetimeformat}}
         <a href="/users/{{comment.user_id}}">{{comment.username}}</a>
-        <p>{{comment.content}}</p>
+        <p>{{comment.content}}
+
+            {% if comment.created_at != comment.edited_at %}
+            <i>(edited {{comment.edited_at|datetimeformat}})</i>
+            {% endif %}
+        </p>
     </div>
     {% endfor %}
     {% if session.username %}

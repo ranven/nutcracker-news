@@ -17,6 +17,10 @@
     
     {%endif%}
     {%if post%}
+    <p>Post created: {{post.created_at|datetimeformat}}</p>
+    {% if post.created_at != post.edited_at %}
+    <p>Post edited: {{post.edited_at|datetimeformat}}</p>
+    {% endif %}
     <h2>Edit post</h2>
     <form method="POST" action="/edit/post/{{post.post_id}}">
         <input type="hidden" name="method" value="put" />

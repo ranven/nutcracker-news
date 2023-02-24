@@ -1,13 +1,13 @@
 from db import db
 
 def get_comments(post_id):
-    sql = "SELECT c.content, c.created_at, u.username, u.user_id FROM comments c JOIN users u ON c.user_id = u.user_id WHERE c.post_id = :post_id"
+    sql = "SELECT c.content, c.created_at, c.edited_at, u.username, u.user_id FROM comments c JOIN users u ON c.user_id = u.user_id WHERE c.post_id = :post_id"
     result = db.session.execute(sql, {"post_id": post_id})
     comments = result.fetchall()
     return comments
 
 def get_comment(comment_id):
-    sql = "SELECT c.content, c.created_at, c.comment_id FROM comments c WHERE c.comment_id = :comment_id"
+    sql = "SELECT c.content, c.created_at, c.edited_at, c.comment_id FROM comments c WHERE c.comment_id = :comment_id"
     result = db.session.execute(sql, {"comment_id": comment_id})
     comment = result.fetchone()
     return comment
@@ -35,7 +35,7 @@ def delete_comment(comment_id, user_id):
     return True
 
 def update_comment(comment_id, content, user_id):
-    sql = "UPDATE comments SET content = :content WHERE comment_id = :comment_id AND user_id = :user_id"
+    sql = "UPDATE comments SET content = :content, edited_at = CURRENT_TIMESTAMP WHERE comment_id = :comment_id AND user_id = :user_id"
     db.session.execute(sql, {"comment_id": comment_id, "user_id": user_id, "content": content})
     db.session.commit()
     return True
