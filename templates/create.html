@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+<html>
+    {% block page_content %}
+    {% if session.username %}
+    <h1>Create a post</h1>
+    <form action="/posts" method="POST">
+        <label>Post title</label><br/>
+        <input name="title" type="text"><br/>
+        <label>Content</label><br/>
+        <textarea name="content"></textarea>
+        <br/>
+        <input type="submit" value="Submit">
+    </form>
+    {% else %}
+    <p>You need an account to submit posts. Sign up <a href="/signup">here!</a></p>
+    {%endif%}
+{% endblock %}
+</html>

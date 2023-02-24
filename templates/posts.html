@@ -2,6 +2,8 @@
 <html>
     {% block page_content %}
     <div>
+        <a href="/posts/create">Create a post</a>
+        <br/>
         {% if posts %}
         {% for post in posts %}
         <div>
@@ -28,15 +30,6 @@
         {% endif %}
     </div>
     <hr/>
-    <h1>Make a post</h1>
-    <form action="/posts" method="POST">
-        <label>Post title</label><br/>
-        <input name="title" type="text"><br/>
-        <label>Content</label><br/>
-        <textarea name="content"></textarea>
-        <br/>
-        <input type="submit" value="Submit">
-    </form>
     <div>
         {% for message in get_flashed_messages() %}
         <p>

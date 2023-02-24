@@ -69,13 +69,17 @@ def get_post(post_id):
     post = posts.get_post(authenticated_user, post_id)
     post_comments = comments.get_comments(post_id)
     return render_template("post.html", post=post, post_comments=post_comments)
+
+@app.route("/posts/create", methods=["GET"])
+def create_post():
+    if request.method == "GET":
+        return render_template("create.html")
         
 #comments
 @app.route("/posts/<post_id>/comments", methods=["POST"])
 def send_comment(post_id):
     authenticated_user = auth.user_id()
     content = request.form["content"]
-    print(content)
     if comments.send_comment(authenticated_user, post_id, content):
         flash("Comment sent!")
         return redirect("/posts/"+post_id)
@@ -86,8 +90,8 @@ def send_comment(post_id):
 #profiles     
 @app.route("/users/<user_id>", methods=["POST", "GET"])
 def profile(user_id):
-    authenticated_user = auth.user_id()
     is_admin = False
+    authenticated_user = auth.user_id()
 
     if int(user_id) == authenticated_user:
         is_admin = True
@@ -115,6 +119,7 @@ def send_vote():
     authenticated_user = auth.user_id()
     post_id = request.form["post_id"]
     vote_code = True if request.form["vote_button"] == "+1" else False
+    
     if votes.send_vote(authenticated_user, post_id, vote_code):
         return redirect('/posts') 
     else:
@@ -133,8 +138,8 @@ def modify_content(content_id, content_type):
             return render_template("edit.html", comment=comment, post=None)
             
     elif request.method == "POST":
-        method = request.form["method"]
         authenticated_user = auth.user_id()
+        method = request.form["method"]
         match (content_type, method):
             case "post", "put":
                 title = request.form["title"]
