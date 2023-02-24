@@ -9,6 +9,7 @@ def get_all_posts(user_id):
         LEFT JOIN users u ON p.user_id = u.user_id
         LEFT JOIN votes v ON v.post_id = p.post_id
         GROUP BY(p.post_id, u.user_id, p.created_at)
+        ORDER BY(p.edited_at, p.created_at) DESC
         """
     else:
         sql = """SELECT p.title, p.content, p.created_at, p.post_id, u.user_id, u.username,
@@ -19,6 +20,7 @@ def get_all_posts(user_id):
         LEFT JOIN users u ON p.user_id = u.user_id
         LEFT JOIN votes v ON v.post_id = p.post_id AND v.user_id != (:user_id)
         GROUP BY(p.post_id, u.user_id, p.created_at)
+        ORDER BY(p.edited_at, p.created_at) DESC
         """
     result = db.session.execute(sql, {"user_id": user_id})
     posts = result.fetchall()
@@ -49,7 +51,7 @@ def get_post(user_id, post_id):
     return post
 
 def get_users_posts(user_id):
-    sql = "SELECT title, content, created_at, post_id FROM posts WHERE user_id = :user_id"
+    sql = "SELECT title, content, created_at, post_id FROM posts WHERE user_id = :user_id ORDER BY p.created_at DESC"
     result = db.session.execute(sql, {"user_id":user_id})
     posts = result.fetchall()
     return posts

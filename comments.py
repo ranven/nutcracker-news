@@ -1,7 +1,7 @@
 from db import db
 
 def get_comments(post_id):
-    sql = "SELECT c.content, c.created_at, c.edited_at, u.username, u.user_id FROM comments c JOIN users u ON c.user_id = u.user_id WHERE c.post_id = :post_id"
+    sql = "SELECT c.content, c.created_at, c.edited_at, u.username, u.user_id FROM comments c JOIN users u ON c.user_id = u.user_id WHERE c.post_id = :post_id ORDER BY c.created_at DESC"
     result = db.session.execute(sql, {"post_id": post_id})
     comments = result.fetchall()
     return comments
@@ -13,7 +13,7 @@ def get_comment(comment_id):
     return comment
 
 def get_users_comments(user_id):
-    sql = "SELECT c.comment_id, c.content, c.created_at, c.edited_at, c.post_id FROM comments c WHERE c.user_id = :user_id"
+    sql = "SELECT c.comment_id, c.content, c.created_at, c.edited_at, c.post_id FROM comments c WHERE c.user_id = :user_id ORDER BY c.created_at DESC"
     result = db.session.execute(sql, {"user_id": user_id})
     comments = result.fetchall()
     return comments
