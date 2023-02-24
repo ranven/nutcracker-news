@@ -3,13 +3,14 @@
     {% block page_content %}
     {%if comment%}
     <h2>Edit comment</h2>
-    <form method="POST" action="/comments/{{comment.comment_id}}">
+    <form method="POST" action="/edit/comment/{{comment.comment_id}}">
         <input type="hidden" name="method" value="put" />
         <label>Content</label><br/>
         <input name="content" type="text" value="{{comment.content}}">
         <input type="submit" value="Submit">
     </form>
-    <form method="POST" action="/comments/{{comment.comment_id}}">
+    <hr/>
+    <form method="POST" action="/edit/comment/{{comment.comment_id}}">
         <input type="hidden" name="method" value="delete" />
         <input type="submit" value="Delete comment">
     </form>
@@ -17,13 +18,16 @@
     {%endif%}
     {%if post%}
     <h2>Edit post</h2>
-    <form method="POST" action="/posts/{{post.post_id}}">
+    <form method="POST" action="/edit/post/{{post.post_id}}">
         <input type="hidden" name="method" value="put" />
-        <input name="title" type="text" value="{{post.title}}">
-        <input name="content" type="textarea" value="{{post.content}}">
+        <label>Title</label><br/>
+        <input name="title" type="text" value="{{post.title}}"><br/>
+        <label>Content</label><br/>
+        <textarea name="content">{{post.content}}</textarea><br/>
         <input type="submit" value="Submit">
     </form>
-    <form method="POST" action="/posts/{{post.post_id}}">
+    <hr/>
+    <form method="POST" action="/edit/post/{{post.post_id}}">
         <input type="hidden" name="method" value="delete" />
         <input type="submit" value="Delete post">
     </form>

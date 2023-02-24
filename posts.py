@@ -62,3 +62,15 @@ def submit_post(title, content, user_id):
     db.session.commit()
     return True
 
+def delete_post(post_id, user_id):
+    sql = "DELETE FROM posts WHERE post_id = :post_id AND user_id = :user_id"
+    db.session.execute(sql, {"user_id": user_id, "post_id": post_id})
+    db.session.commit()
+    return True
+
+def update_post(post_id, content, title, user_id):
+    sql = "UPDATE posts SET content = :content, title = :title WHERE post_id = :post_id AND user_id = :user_id"
+    db.session.execute(sql, {"post_id": post_id, "user_id": user_id, "content": content, "title": title})
+    db.session.commit()
+    return True
+

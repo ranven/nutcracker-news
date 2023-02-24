@@ -30,6 +30,11 @@
                     <a href="/posts/{{post.post_id}}">
                         View post
                     </a>
+                    {%if admin%}
+                    <form action="/edit/post/{{post.post_id}}" method="GET">
+                        <input type="submit" value="Edit post">
+                    </form>
+                    {%endif%}
                 </div>
                 {% endfor %}
             {% else %}
@@ -45,14 +50,14 @@
                     View post
                 </a>
                 {%if admin%}
-                <form action="/comments/{{comment.comment_id}}" method="GET">
+                <form action="/edit/comment/{{comment.comment_id}}" method="GET">
                     <input type="submit" value="Edit comment">
                 </form>
                 {%endif%}
             </div>
             {% endfor %}
         {% else %}
-            <p>No posts to display.</p>
+            <p>No comments to display.</p>
         {% endif %}
     {% endif %}
     </div>

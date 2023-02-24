@@ -7,6 +7,7 @@ import auth, posts, profiles, votes, comments
 def index():
     return redirect("/posts")
 
+#auth
 @app.route("/login", methods=["POST", "GET"])
 def login():
     if request.method == "GET":
@@ -44,6 +45,7 @@ def logout():
     auth.logout()
     return redirect("/")
 
+#posts
 @app.route("/posts", methods=["POST", "GET"])
 def post():
     authenticated_user = auth.user_id()
@@ -67,7 +69,8 @@ def get_post(post_id):
     post = posts.get_post(authenticated_user, post_id)
     post_comments = comments.get_comments(post_id)
     return render_template("post.html", post=post, post_comments=post_comments)
-
+        
+#comments
 @app.route("/posts/<post_id>/comments", methods=["POST"])
 def send_comment(post_id):
     authenticated_user = auth.user_id()
@@ -79,7 +82,8 @@ def send_comment(post_id):
     else:
         flash("You need an account to comment.")
         return redirect("login")
-        
+
+#profiles     
 @app.route("/users/<user_id>", methods=["POST", "GET"])
 def profile(user_id):
     authenticated_user = auth.user_id()
@@ -105,6 +109,7 @@ def profile(user_id):
             flash("You cannot edit someone else's profile.")
             return redirect("/posts")
 
+#votes
 @app.route("/likes", methods=["POST"])
 def send_vote():
     authenticated_user = auth.user_id()
@@ -116,24 +121,44 @@ def send_vote():
         flash("err")
         return redirect('/posts')
 
-@app.route("/comments/<comment_id>", methods=["GET", "POST"])
-def modify_comment(comment_id):
-    authenticated_user = auth.user_id()
+#edit/delete posts/comments
+@app.route("/edit/<content_type>/<content_id>", methods=["GET", "POST"])
+def modify_content(content_id, content_type):
     if request.method == "GET":
-        comment = comments.get_comment(comment_id)
-        return render_template("edit.html", comment=comment, post=None)
+        if content_type == "post":
+            post = posts.get_post(0, content_id)
+            return render_template("edit.html", comment=None, post=post)
+        elif content_type == "comment":
+            comment = comments.get_comment(content_id)
+            return render_template("edit.html", comment=comment, post=None)
+            
     elif request.method == "POST":
         method = request.form["method"]
-        if method == "delete":
-            if comments.delete_comment(comment_id, authenticated_user):
-                flash("Comment deleted!")
-                return redirect("/users/"+str(authenticated_user))
-        elif method == "put":
-            content = request.form["content"]
-            if len(content) > 0:
-                if comments.update_comment(comment_id, content, authenticated_user):
-                    flash("Comment updated!")
-                    return redirect("/comments/"+comment_id)
-        return redirect('/posts')
-
+        authenticated_user = auth.user_id()
+        match (content_type, method):
+            case "post", "put":
+                title = request.form["title"]
+                content = request.form["content"]
+                if len(content) > 0:
+                    if posts.update_post(content_id, content, title, authenticated_user):
+                        flash("Post updated!")
+                        return redirect("/posts/"+content_id)
+                
+            case "post", "delete":
+                if posts.delete_post(content_id, authenticated_user):
+                    flash("Post deleted!")
+                    return redirect("/users/"+str(authenticated_user))
+                
+            case "comment", "put":
+                content = request.form["content"]
+                if len(content) > 0:
+                    if comments.update_comment(content_id, content, authenticated_user):
+                        flash("Comment updated!")
+                        return redirect("/comments/"+content_id)
+                    
+            case "comment", "delete":
+                if comments.delete_comment(content_id, authenticated_user):
+                    flash("Comment deleted!")
+                    return redirect("/users/"+str(authenticated_user))
+    
 #todo: refactor flash messages and error handling, currently buggy
