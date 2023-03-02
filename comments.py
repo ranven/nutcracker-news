@@ -17,8 +17,6 @@ def get_users_comments(user_id):
     result = db.session.execute(sql, {"user_id": user_id})
     comments = result.fetchall()
     return comments
-
-#edit comment: pass comment id and content to def
     
 def send_comment(user_id, post_id, content):
     if user_id == 0:

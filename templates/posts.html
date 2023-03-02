@@ -5,6 +5,16 @@
         <a href="/posts/create">Create a post</a>
         <br/>
         {% if posts %}
+        <form method="get" action="/posts">
+            <label>Sort posts by</label>
+            <select name="sort_by">
+                <option value="new" {%if sort_by=="new"%}selected{%endif%}>New</option>
+                <option value="old" {%if sort_by=="old"%}selected{%endif%}>Old</option>
+                <option value="votes" {%if sort_by=="votes"%}selected{%endif%}>Votes</option>
+                <option value="comments" {%if sort_by=="comments"%}selected{%endif%}>Comments</option>
+            </select>
+            <input type="submit" value="Sort">
+        </form>
         {% for post in posts %}
         <div>
             {% if session.username %}

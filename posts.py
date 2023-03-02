@@ -1,6 +1,6 @@
 from db import db
 
-def get_all_posts(user_id):
+def get_all_posts(user_id, sort_param):
     if user_id == 0:
         sql = """SELECT p.title, p.content, p.created_at, p.post_id, u.user_id, u.username, 
         (SELECT COALESCE(SUM((v.vote_code)::int)-SUM((not v.vote_code)::int), 0) as votes FROM votes v WHERE v.post_id = p.post_id),
@@ -9,7 +9,6 @@ def get_all_posts(user_id):
         LEFT JOIN users u ON p.user_id = u.user_id
         LEFT JOIN votes v ON v.post_id = p.post_id
         GROUP BY(p.post_id, u.user_id, p.created_at)
-        ORDER BY(p.edited_at, p.created_at) DESC
         """
     else:
         sql = """SELECT p.title, p.content, p.created_at, p.post_id, u.user_id, u.username,
@@ -20,8 +19,8 @@ def get_all_posts(user_id):
         LEFT JOIN users u ON p.user_id = u.user_id
         LEFT JOIN votes v ON v.post_id = p.post_id AND v.user_id != (:user_id)
         GROUP BY(p.post_id, u.user_id, p.created_at)
-        ORDER BY(p.edited_at, p.created_at) DESC
         """
+    sql += post_order(sort_param)
     result = db.session.execute(sql, {"user_id": user_id})
     posts = result.fetchall()
     return posts
@@ -75,4 +74,17 @@ def update_post(post_id, content, title, user_id):
     db.session.execute(sql, {"post_id": post_id, "user_id": user_id, "content": content, "title": title})
     db.session.commit()
     return True
+
+def post_order(sort_param):
+    order = "ORDER BY "
+    match sort_param:
+        case "new":
+            order += "(p.edited_at, p.created_at) DESC"
+        case "old":
+            order += "(p.edited_at, p.created_at) ASC"
+        case "votes":
+            order += "votes DESC"
+        case "comments":
+            order += "comment_count DESC"
+    return order
 

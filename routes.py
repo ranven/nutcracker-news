@@ -50,8 +50,12 @@ def logout():
 def post():
     authenticated_user = auth.user_id()
     if request.method == "GET":
-        all_posts = posts.get_all_posts(authenticated_user)
-        return render_template("posts.html", posts=all_posts)
+        if request.args.get("sort_by"):
+            sort_param = request.args.get("sort_by")
+        else: 
+            sort_param = "new"
+        all_posts = posts.get_all_posts(authenticated_user, sort_param)
+        return render_template("posts.html", posts=all_posts, sort_by=sort_param)
     
     if request.method == "POST":
         title = request.form["title"]
