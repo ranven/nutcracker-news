@@ -52,9 +52,11 @@ def post():
     if request.method == "GET":
         if request.args.get("sort_by"):
             sort_param = request.args.get("sort_by")
+            search_term = request.args.get("search_term")
         else: 
             sort_param = "new"
-        all_posts = posts.get_all_posts(authenticated_user, sort_param)
+            search_term = ""
+        all_posts = posts.get_all_posts(authenticated_user, sort_param, search_term)
         return render_template("posts.html", posts=all_posts, sort_by=sort_param)
     
     if request.method == "POST":

@@ -2,9 +2,7 @@
 <html>
     {% block page_content %}
     <div>
-        <a href="/posts/create">Create a post</a>
-        <br/>
-        {% if posts %}
+        <h2>Filter posts</h2>
         <form method="get" action="/posts">
             <label>Sort posts by</label>
             <select name="sort_by">
@@ -13,8 +11,14 @@
                 <option value="votes" {%if sort_by=="votes"%}selected{%endif%}>Votes</option>
                 <option value="comments" {%if sort_by=="comments"%}selected{%endif%}>Comments</option>
             </select>
-            <input type="submit" value="Sort">
+            <br/>
+            <label>Search for posts</label>
+            <input type="text" name="search_term" placeholder="Insert keyword">
+            <br/>
+            <input type="submit" value="Filter posts">
         </form>
+        <hr/>
+        {% if posts %}
         {% for post in posts %}
         <div>
             {% if session.username %}

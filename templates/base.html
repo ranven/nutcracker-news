@@ -7,12 +7,13 @@
     <body>
         <div>
             <h1>Nutcracker News</h1>
-        {% if session.username %}
+            {% if session.username %}
             <h3>Welcome {{session.username}} </h3>
             <div style="display: flex">
                 <a href="/logout">Log out</a>
                 <a href="/posts">Posts</a>
                 <a href="/users/{{session.user_id}}">My profile</a>
+                <a href="/posts/create">Create a post</a>
             {% else %}
             <a href="/signup">Sign up</a>
             <a href="/login">Log in</a>

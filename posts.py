@@ -1,6 +1,6 @@
 from db import db
 
-def get_all_posts(user_id, sort_param):
+def get_all_posts(user_id, sort_param, search_term):
     if user_id == 0:
         sql = """SELECT p.title, p.content, p.created_at, p.post_id, u.user_id, u.username, 
         (SELECT COALESCE(SUM((v.vote_code)::int)-SUM((not v.vote_code)::int), 0) as votes FROM votes v WHERE v.post_id = p.post_id),
@@ -8,6 +8,7 @@ def get_all_posts(user_id, sort_param):
         FROM posts p
         LEFT JOIN users u ON p.user_id = u.user_id
         LEFT JOIN votes v ON v.post_id = p.post_id
+        search
         GROUP BY(p.post_id, u.user_id, p.created_at)
         """
     else:
@@ -18,10 +19,14 @@ def get_all_posts(user_id, sort_param):
         FROM posts p
         LEFT JOIN users u ON p.user_id = u.user_id
         LEFT JOIN votes v ON v.post_id = p.post_id AND v.user_id != (:user_id)
+        search
         GROUP BY(p.post_id, u.user_id, p.created_at)
         """
-    sql += post_order(sort_param)
-    result = db.session.execute(sql, {"user_id": user_id})
+    # add order by-clause to sql statement
+    sql += get_order_clause(sort_param)
+    # add where-clause to sql statement
+    sql = sql.replace('search', get_search_clause(search_term))
+    result = db.session.execute(sql, {"user_id": user_id, "search_term": search_term})
     posts = result.fetchall()
     return posts
 
@@ -75,7 +80,9 @@ def update_post(post_id, content, title, user_id):
     db.session.commit()
     return True
 
-def post_order(sort_param):
+#helper functions
+
+def get_order_clause(sort_param):
     order = "ORDER BY "
     match sort_param:
         case "new":
@@ -87,4 +94,12 @@ def post_order(sort_param):
         case "comments":
             order += "comment_count DESC"
     return order
+
+def get_search_clause(search_term):
+    if len(search_term) > 0:
+        search = 'WHERE strpos(title, :search_term)>0 OR p.content ~* :search_term'
+    else:
+        search = ''
+    return search
+
 
