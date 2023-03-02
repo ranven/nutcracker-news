@@ -5,9 +5,9 @@
     <h1>Create a post</h1>
     <form action="/posts" method="POST">
         <label>Post title</label><br/>
-        <input name="title" type="text"><br/>
+        <input name="title" type="text" maxlength="100" minlength="1" placeholder="Max 100 characters" required><br/>
         <label>Content</label><br/>
-        <textarea name="content"></textarea>
+        <textarea name="content" maxlength="1000" minlength="1" placeholder="Max 1000 characters" required></textarea>
         <br/>
         <input type="submit" value="Submit">
     </form>

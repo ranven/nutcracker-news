@@ -7,9 +7,9 @@
     <h1>Log in</h1>
     <form action="/login" method="POST">
         <label>Username</label><br/>
-        <input name="username" type="text"><br/>
+        <input name="username" type="text" maxlength="20" minlength="1" required><br/>
         <label>Password</label><br/>
-        <input name="password" type="password">
+        <input name="password" type="password" maxlength="100" minlength="1" required>
         <br/>
         <input type="submit" value="Log in">
     </form>

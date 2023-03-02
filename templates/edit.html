@@ -6,7 +6,7 @@
     <form method="POST" action="/edit/comment/{{comment.comment_id}}">
         <input type="hidden" name="method" value="put" />
         <label>Content</label><br/>
-        <input name="content" type="text" value="{{comment.content}}">
+        <input name="content" type="text" minlength="1" maxlength="1000" value="{{comment.content}}" required>
         <input type="submit" value="Submit">
     </form>
     <hr/>
@@ -25,9 +25,9 @@
     <form method="POST" action="/edit/post/{{post.post_id}}">
         <input type="hidden" name="method" value="put" />
         <label>Title</label><br/>
-        <input name="title" type="text" value="{{post.title}}"><br/>
+        <input name="title" type="text" maxlength="100" minlength="1" value="{{post.title}}" required><br/>
         <label>Content</label><br/>
-        <textarea name="content">{{post.content}}</textarea><br/>
+        <textarea name="content" maxlength="1000" minlength="1" required>{{post.content}}</textarea><br/>
         <input type="submit" value="Submit">
     </form>
     <hr/>

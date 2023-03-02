@@ -7,10 +7,10 @@
     <h1>Sign up</h1>
     <form action="/signup" method="POST">
         <label>Username</label><br/>
-        <input value="{{username}}" name="username" type="text"><br/>
+        <input value="{{username}}" name="username" type="text" maxlength="20" minlength="3" required><br/>
         <!-- todo: password requirements -->
         <label>Password</label><br/>
-        <input name="password" type="password">
+        <input name="password" type="password" maxlength="100" minlength="6" required>
         <br/>
         <input type="submit" value="Sign up">
     </form>
