@@ -6,11 +6,16 @@
     {% else %}
     <h1>Sign up</h1>
     <form action="/signup" method="POST">
+        <p>Username must be 3-20 characters long.</p>
         <label>Username</label><br/>
         <input value="{{username}}" name="username" type="text" maxlength="20" minlength="3" required><br/>
-        <!-- todo: password requirements -->
+        <p>Password must:</p>
+        <li>Be at least 6 characters long</li>
+        <li>Contain at least one number</li>
+        <li>Contain at least one uppercase character</li>
+        <li>Contain at least one lowercase character</li><br/>
         <label>Password</label><br/>
-        <input name="password" type="password" maxlength="100" minlength="6" required>
+        <input name="password" type="password" maxlength="128" minlength="6" required>
         <br/>
         <input type="submit" value="Sign up">
     </form>

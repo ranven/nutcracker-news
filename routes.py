@@ -2,6 +2,7 @@ from app import app
 from flask import flash
 from flask import render_template, request, redirect
 import auth, posts, profiles, votes, comments
+import helpers
 
 @app.route("/")
 def index():
@@ -17,12 +18,13 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
         
-        if auth.login(username, password):
-            flash("Login successful...")
-            return redirect("/posts")
-        else:
-            flash("Invalid password or username.")
-            redirect("/login")
+        if helpers.validate_length(username, "username"):
+            if auth.login(username, password):
+                flash("Login successful...")
+                return redirect("/posts")
+            else:
+                flash("Invalid password or username.")
+                redirect("/login")
 
 @app.route("/signup", methods=["POST", "GET"])
 def signup():
@@ -32,13 +34,18 @@ def signup():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        if auth.signup(username, password):
-            profiles.create_profile()
-            flash("Successfully signed up!")
-            return redirect("/posts") 
+        if helpers.validate_password(password) and helpers.validate_length(username, "username"):
+            if auth.signup(username, password):
+                profiles.create_profile()
+                flash("Successfully signed up!")
+                return redirect("/posts") 
+            else:
+                flash("An error occurred. Please try again")
+                return redirect("/signup")
         else:
-            flash("An error occurred. Please try again")
+            flash("Username or password doesn't match requirements.")
             return redirect("/signup")
+        
     
 @app.route("/logout")
 def logout():
@@ -62,12 +69,15 @@ def post():
     if request.method == "POST":
         title = request.form["title"]
         content = request.form["content"]
-        if posts.submit_post(title, content, authenticated_user):
-            flash("Post successfully created!")
-            return redirect("/posts")
+        if helpers.validate_length(title, "post_title") and helpers.validate_length(content, "post_content"):
+            if posts.submit_post(title, content, authenticated_user):
+                flash("Post successfully created!")
+                return redirect("/posts")
+            else:
+                flash("You need an account to post.")
+                return redirect("login")
         else:
-            flash("You need an account to post.")
-            return redirect("login")
+            flash("Maximum length of title or content exceeded.")
         
 @app.route("/posts/<post_id>", methods=["GET"])
 def get_post(post_id):
@@ -86,12 +96,15 @@ def create_post():
 def send_comment(post_id):
     authenticated_user = auth.user_id()
     content = request.form["content"]
-    if comments.send_comment(authenticated_user, post_id, content):
-        flash("Comment sent!")
-        return redirect("/posts/"+post_id)
+    if helpers.validate_length(content, "comment_content"):
+        if comments.send_comment(authenticated_user, post_id, content):
+            flash("Comment sent!")
+            return redirect("/posts/"+post_id)
+        else:
+            flash("You need an account to comment.")
+            return redirect("login")
     else:
-        flash("You need an account to comment.")
-        return redirect("login")
+        flash("Maximum length of content exceeded.")
 
 #profiles     
 @app.route("/users/<user_id>", methods=["POST", "GET"])
@@ -112,12 +125,15 @@ def profile(user_id):
         if is_admin:
             description = request.form["description"]
             country = request.form["country"]
-            if profiles.update_profile(description, country):
-                flash("Profile successfully updated!")
-                return redirect("/users/"+user_id)
-        else:
-            flash("You cannot edit someone else's profile.")
-            return redirect("/posts")
+            if helpers.validate_length(description, "description") and helpers.validate_length(country, "country"):
+                if profiles.update_profile(description, country):
+                    flash("Profile successfully updated!")
+                    return redirect("/users/"+user_id)
+                else:
+                    flash("You cannot edit someone else's profile.")
+                    return redirect("/posts")
+            else:
+                flash("Maximum length of content exceeded.")
 
 #votes
 @app.route("/likes", methods=["POST"])
@@ -150,10 +166,12 @@ def modify_content(content_id, content_type):
             case "post", "put":
                 title = request.form["title"]
                 content = request.form["content"]
-                if len(content) > 0:
+                if helpers.validate_length(title, "post_title") and helpers.validate_length(content, "post_content"):
                     if posts.update_post(content_id, content, title, authenticated_user):
                         flash("Post updated!")
                         return redirect("/edit/post/"+content_id)
+                else:
+                    flash("Maximum length of title or content exceeded.")
                 
             case "post", "delete":
                 if posts.delete_post(content_id, authenticated_user):
@@ -162,19 +180,22 @@ def modify_content(content_id, content_type):
                 
             case "comment", "put":
                 content = request.form["content"]
-                if len(content) > 0:
+                if helpers.validate_length(content, "comment_content"):
                     if comments.update_comment(content_id, content, authenticated_user):
                         flash("Comment updated!")
                         return redirect("/edit/comment/"+content_id)
+                else:
+                    flash("Maximum length of title or content exceeded.")
                     
             case "comment", "delete":
                 if comments.delete_comment(content_id, authenticated_user):
                     flash("Comment deleted!")
                     return redirect("/users/"+str(authenticated_user))
 
+#todo: refactor flash messages and error handling, currently buggy
+
 #filter for timestamps
 @app.template_filter('datetimeformat')
-def datetime_format(value, format="%H:%M %d-%m-%y"):
+def datetime_format(value, format="%-d %b / %H:%M"):
     return value.strftime(format)
 
-#todo: refactor flash messages and error handling, currently buggy
