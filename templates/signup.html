@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 <html>
+    
     {% block page_content %}
     {% if session.username %}
     <p>You're logged in as {{ session.username }}</p>
@@ -20,12 +21,5 @@
         <input type="submit" value="Sign up">
     </form>
 {% endif %}
-<div>
-    {% for message in get_flashed_messages() %}
-    <p>
-        {{ message }}
-    </p>
-    {% endfor %}
-</div>
 {% endblock %}
 </html>

@@ -2,25 +2,43 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-       <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/styles.css') }}">
     </head>
     <body>
-        <div>
-            <h1>Nutcracker News</h1>
-            {% if session.username %}
-            <h3>Welcome {{session.username}} </h3>
-            <div style="display: flex">
-                <a href="/logout">Log out</a>
-                <a href="/posts">Posts</a>
-                <a href="/users/{{session.user_id}}">My profile</a>
-                <a href="/posts/create">Create a post</a>
-            {% else %}
-            <a href="/signup">Sign up</a>
-            <a href="/login">Log in</a>
+        <div class="navbar">
+            <h1 class="navbar-brand justify-content-">Nutcracker News</h1>
+            <div class="nav justify-content-end">
+                    {% if session.username %}
+                    <p class="nav-item nav-link greeting">Hello {{session.username}}!</p>
+                    <a class="nav-item nav-link" {% if request.path == '/' %}class="active"{% endif %} id="posts" href="/posts">Posts</a>
+                    <a class="nav-item nav-link" {% if request.path == '/' %}class="active"{% endif %} id="create" href="/posts/create">Create a post</a>
+                    <a class="nav-item nav-link" {% if request.path == '/' %}class="active"{% endif %} id="{{session.user_id}}" href="/users/{{session.user_id}}">My profile</a>
+                    <a class="nav-item nav-link" {% if request.path == '/' %}class="active"{% endif %} id="logout" href="/logout">Log out</a>
+                    {% else %}
+                    <a class="nav-item nav-link" id="posts" href="/posts">Posts</a>
+                    <a class="nav-item nav-link" id="signup" href="/signup">Sign up</a>
+                    <a class="nav-item nav-link" id="login" href="/login">Log in</a>
+                    {% endif %}
             </div>
-            {% endif %}
         </div>
         <hr/>
+    <div>
+        {% for message in get_flashed_messages() %}
+        <div class="alert alert-primary alert-dismissible fade" role="alert">
+            <p> {{ message }}</p>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="container-fluid">
         {% block page_content %}{% endblock %}
+    </div>
     </body>
 </html>
+    
