@@ -1,4 +1,4 @@
-from db import db
+from services.db import db
 
 def get_all_posts(user_id, sort_param, search_term):
     if user_id == 0:

@@ -1,6 +1,6 @@
 from flask import session
-from db import db
-import auth
+from services.db import db
+import services.auth as auth
 
 def create_profile():
     user_id = auth.user_id()

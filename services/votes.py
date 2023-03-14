@@ -1,4 +1,4 @@
-from db import db
+from services.db import db
 
 def send_vote(user_id, post_id, vote_code):
     if user_id == 0:

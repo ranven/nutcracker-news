@@ -1,8 +1,8 @@
 from app import app
 from flask import flash
 from flask import render_template, request, redirect
-import auth, posts, profiles, votes, comments
-import helpers
+import services.auth as auth, services.posts as posts, services.profiles as profiles, services.votes as votes, services.comments as comments
+import services.helpers as helpers
 
 @app.route("/")
 def index():

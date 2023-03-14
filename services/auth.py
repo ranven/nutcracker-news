@@ -1,6 +1,6 @@
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask import session
-from db import db
+from services.db import db
 
 def signup(username, password):
     hash_value = generate_password_hash(password)

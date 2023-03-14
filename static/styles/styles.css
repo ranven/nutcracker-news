@@ -1,0 +1,8 @@
+/* fix for buggy bootstrap nav bar */
+.navbar-collapse.collapse.in {
+    display: block!important;
+  }
+.greeting {
+  color: gray;
+  font-style: italic;
+}

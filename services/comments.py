@@ -1,4 +1,4 @@
-from db import db
+from services.db import db
 
 def get_comments(post_id):
     sql = "SELECT c.content, c.created_at, c.edited_at, u.username, u.user_id FROM comments c JOIN users u ON c.user_id = u.user_id WHERE c.post_id = :post_id ORDER BY c.created_at DESC"

@@ -1,6 +1,6 @@
 import re
 from app import app
-import inputs
+import services.inputs as inputs
 
 def validate_password(pw):
     if re.fullmatch(r"^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])[A-Za-z\d]{6,128}$", pw) is None:
