@@ -6,3 +6,9 @@
   color: gray;
   font-style: italic;
 }
+.upvote-counter {
+  margin: 2px !important;
+}
+.post-content {
+  overflow-wrap: break-word;
+}
