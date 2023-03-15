@@ -14,25 +14,25 @@
             <div class="nav justify-content-end">
                     {% if session.username %}
                     <p class="nav-item nav-link greeting">Hello {{session.username}}!</p>
-                    <a class="nav-item nav-link" {% if request.path == '/' %}class="active"{% endif %} id="posts" href="/posts">Posts</a>
-                    <a class="nav-item nav-link" {% if request.path == '/' %}class="active"{% endif %} id="create" href="/posts/create">Create a post</a>
-                    <a class="nav-item nav-link" {% if request.path == '/' %}class="active"{% endif %} id="{{session.user_id}}" href="/users/{{session.user_id}}">My profile</a>
-                    <a class="nav-item nav-link" {% if request.path == '/' %}class="active"{% endif %} id="logout" href="/logout">Log out</a>
+                    <a class="nav-item nav-link" href="/posts">Posts</a>
+                    <a class="nav-item nav-link" href="/posts/create">Create a post</a>
+                    <a class="nav-item nav-link" href="/users/{{session.user_id}}">My profile</a>
+                    <a class="nav-item nav-link" href="/logout">Log out</a>
                     {% else %}
-                    <a class="nav-item nav-link" id="posts" href="/posts">Posts</a>
-                    <a class="nav-item nav-link" id="signup" href="/signup">Sign up</a>
-                    <a class="nav-item nav-link" id="login" href="/login">Log in</a>
+                    <a class="nav-item nav-link" href="/posts">Posts</a>
+                    <a class="nav-item nav-link" href="/signup">Sign up</a>
+                    <a class="nav-item nav-link" href="/login">Log in</a>
                     {% endif %}
             </div>
         </div>
         <hr/>
     <div>
         {% for message in get_flashed_messages() %}
-        <div class="alert alert-primary alert-dismissible fade" role="alert">
+        <div class="alert alert-primary alert-dismissible fade show"  role="alert">
             <p> {{ message }}</p>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
-            </button>
+              </button>
         </div>
         {% endfor %}
     </div>

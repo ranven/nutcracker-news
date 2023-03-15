@@ -3,24 +3,29 @@
     {% block page_content %}
     <div>
         {% if profile %}
-            <h2>{{profile.username}}'s profile</h2>
-            <p>description: {{profile.description}}</p>
-            <p>country: {{profile.country}}</p>
-            <hr/>
+        <h2>{{profile.username}}'s profile</h2>
+        <div class="card bg-light mb-3">
+                <div class="card-body">
+                    <p><b>joined</b> {{profile.created_at|datetimeformat}}</p>
+                    <p><b>about</b> {{profile.description}}</p>
+                    <p><b>from</b> {{profile.country}}</p>
+                </div>
+            </div>
             {% if admin %}
-            <h2>Edit profile</h2>
                 <form action="/users/{{session.user_id}}" method="POST">
-                    <label>Description (max 250 characters)</label><br/>
-                    <textarea name="description" value="{{profile.description}}" maxlength="250" placeholder="Who are you?"></textarea><br/>
-                    <label>Country</label><br/>
-                    <input type="text" name="country" value="{{profile.country}}" maxlength="50" placeholder="Where are you from?">
-                    <br/>
-                    <input type="submit" value="Submit">
+                    <div class="form-group">
+                        <label>Description <small>(max 250 characters)</small></label><br/>
+                        <textarea class="form-control" name="description" maxlength="250" placeholder="Who are you?">{{profile.description}}</textarea><br/>
+                        <label>Country</label><br/>
+                        <input class="form-control" type="text" name="country" value="{{profile.country}}" maxlength="50" placeholder="Where are you from?">
+                    </div>
+                    <input class="btn btn-primary" type="submit" value="Update profile">
                 </form>
             {% endif %}
-            {% if posts %}
+            <br/>
             <h2>{{profile.username}}'s posts</h2>
             <br/>
+            {% if posts %}
                 {% for post in posts %}
                 <div class="card bg-light mb-3">
                     <div class="card-header">
@@ -28,12 +33,8 @@
                         </small>
                     </div>
                     <div class="card-body">
-                        <h5>
-                            {{post.title}}
-                        </h5>
-
+                        <h5>{{post.title}}</h5>
                         <p>{{post.content}}</p>
-                        
                         <div class="row" style="height: 30px;">
                             <a href="/posts/{{post.post_id}}" class="btn btn-link">
                                 View post
@@ -49,8 +50,8 @@
                 {% endfor %}
             {% else %}
             <p>No posts to display.</p>
-
         {% endif %}
+        <br/>
         <h2>{{profile.username}}'s comments</h2>
         <br/>
         {% if comments %}
