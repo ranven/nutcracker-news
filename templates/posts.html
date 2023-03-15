@@ -41,9 +41,14 @@
                 <p>{{post.content}}</p>
             </div>
             </div> 
-            <div class="card-footer" style="width: 100%">
+            <div class="card-footer">
                 <a href="posts/{{post.post_id}}">
-                    {{post.comment_count}} comments
+                    {{post.comment_count}} 
+                    {% if post.comment_count == 1 %} 
+                    comment
+                    {% else %}
+                    comments
+                    {% endif %}
                 </a>
             </div>     
         </div>
