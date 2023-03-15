@@ -20,7 +20,7 @@ def login():
         
         if helpers.validate_length(username, "username"):
             if auth.login(username, password):
-                flash("Login successful...")
+                flash("Login successful!")
                 return redirect("/posts")
             else:
                 flash("Invalid password or username.")

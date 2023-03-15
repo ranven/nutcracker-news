@@ -4,14 +4,22 @@
     {% if session.username %}
     <p>You're logged in as {{ session.username }}</p>
     {% else %}
-    <h1>Log in</h1>
+    <h2>Log in</h2>
     <form action="/login" method="POST">
-        <label>Username</label><br/>
-        <input name="username" type="text" maxlength="20" minlength="1" required><br/>
-        <label>Password</label><br/>
-        <input name="password" type="password" maxlength="128" minlength="1" required>
-        <br/>
-        <input type="submit" value="Log in">
+        <div class="form-group">
+            <label>Username</label><br/>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroupPrepend2">@</span>
+                </div>
+                <input class="form-control" name="username" type="text" maxlength="20" minlength="1" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Password</label><br/>
+            <input class="form-control" name="password" type="password" maxlength="128" minlength="1" required>
+        </div>
+        <input class="btn btn-primary" type="submit" value="Log in">
     </form>
 {% endif %}
 {% endblock %}

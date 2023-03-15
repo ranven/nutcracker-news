@@ -2,15 +2,23 @@
 <html>
     {% block page_content %}
     {% if session.username %}
-    <h1>Create a post</h1>
+    <h2>Create a post</h2>
     <form action="/posts" method="POST">
-        <label>Post title</label><br/>
-        <input name="title" type="text" maxlength="100" minlength="1" placeholder="Max 100 characters" required><br/>
-        <label>Content</label><br/>
-        <textarea name="content" maxlength="1000" minlength="1" placeholder="Max 1000 characters" required></textarea>
-        <br/>
-        <input type="submit" value="Submit">
-    </form>
+        <div class="card bg-light mb-3">
+            <div class="card-body">
+
+                <div class="form-group">
+                    <label>Post title</label>
+                    <input class="form-control" name="title" type="text" maxlength="100" minlength="1" placeholder="Max 100 characters" required>
+                </div>
+                <div class="form-group">
+                    <label>Content</label>
+                    <textarea class="form-control" name="content" maxlength="1000" minlength="1" placeholder="Max 1000 characters" required></textarea>
+                </div>
+                <input type="submit" class="btn btn-primary" value="Submit">
+            </form>
+        </div>
+    </div>
     {% else %}
     <p>You need an account to submit posts. Sign up <a href="/signup">here!</a></p>
     {%endif%}

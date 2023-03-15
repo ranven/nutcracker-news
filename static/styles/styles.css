@@ -10,3 +10,10 @@
 .post-content {
   overflow-wrap: break-word;
 }
+.logo {
+  background-color: #007bff;
+  color: #FFF;
+  padding: 2px 6;
+  border-radius: 0px;
+  margin-right: 4px;
+}

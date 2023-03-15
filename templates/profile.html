@@ -3,7 +3,7 @@
     {% block page_content %}
     <div>
         {% if profile %}
-        <h2>{{profile.username}}'s profile</h2>
+        <h2>{{profile.username}}'s profile</h2><br/>
         <div class="card bg-light mb-3">
                 <div class="card-body">
                     <p><b>joined</b> {{profile.created_at|datetimeformat}}</p>
