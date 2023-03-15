@@ -1,13 +1,11 @@
-/* fix for buggy bootstrap nav bar */
-.navbar-collapse.collapse.in {
-    display: block!important;
-  }
 .greeting {
   color: gray;
   font-style: italic;
 }
 .upvote-counter {
-  margin: 2px !important;
+  margin: 2px;
+  padding: .5rem 0;
+  text-align: center;
 }
 .post-content {
   overflow-wrap: break-word;

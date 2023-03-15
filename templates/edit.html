@@ -6,7 +6,7 @@
     <form method="POST" action="/edit/comment/{{comment.comment_id}}">
         <input type="hidden" name="method" value="put" />
         <label>Content</label><br/>
-        <input name="content" type="text" minlength="1" maxlength="1000" value="{{comment.content}}" required>
+        <input name="content" type="text" minlength="1" maxlength="100" value="{{comment.content}}" required>
         <input type="submit" value="Submit">
     </form>
     <hr/>
