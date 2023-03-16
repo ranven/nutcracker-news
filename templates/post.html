@@ -1,64 +1,72 @@
 {% extends "base.html" %}
 <html>
-    {% block page_content %}
-    <div>
-        {% if post %}
-        <div class="card bg-light mb-3">
-            <div class="card-header">
-                <small class="text-muted col-md row">Created: {{post.created_at|datetimeformat}}
-                    {% if post.created_at != post.edited_at %}
-                    <br/>Edited: {{post.edited_at|datetimeformat}}
-                    {% endif %}
-                </small>
-                <a class="col-md row" href="/users/{{post.user_id}}">{{post.username}}</a>
-            </div>
-            <div class="row card-body">
-                {% if session.username %}
-                <form class="my-auto col-1"  method="post" action="/likes">
-                    <input type="hidden" name="post_id" value="{{post.post_id}}">
-                    <input class="btn btn-sm btn-light col-md-6 offset-md-3 text-muted" {% if post.vote_code == true %} id="has-voted" {%endif%} type="submit" name="vote_button" value="+1">
-                    <h5 class="upvote-counter col-md-12">{{ post.votes }} </h5>
-                    <input class="btn btn-sm btn-light col-md-6 offset-md-3 text-muted" {% if post.vote_code == false %} id="has-voted" {%endif%} type="submit" name="vote_button" value="-1">
-            </form>
-            {% endif %}
-            <div class="col-10 post-content">
-                <h3>
-                    {{post.title}}
-                </h3>
-                <p>{{post.content}}</p>
-            </div>
-            </div> 
-        </div>
-        {% else %}
-        <p>This post doesn't exist...</p>
-        <a href="/">Back to post listing</a>
+  {% block page_content %}
+  <div>
+    {% if post %}
+    <div class="card bg-light mb-3">
+      <div class="card-header">
+        <small class="text-muted col-md row"
+          >Created: {{post.created_at|datetimeformat}} {% if post.created_at !=
+          post.edited_at %} <br />Edited: {{post.edited_at|datetimeformat}} {%
+          endif %}
+        </small>
+        <a class="col-md row" href="/users/{{post.user_id}}"
+          >{{post.username}}</a
+        >
+      </div>
+      <div class="row card-body">
+        {% if session.username %}
+        <form class="my-auto col-1" method="post" action="/likes">
+          <input type="hidden" name="post_id" value="{{post.post_id}}" />
+          <input class="btn btn-sm btn-light col-md-6 offset-md-3 text-muted" {%
+          if post.vote_code == true %} id="has-voted" {%endif%} type="submit"
+          name="vote_button" value="+1">
+          <h5 class="upvote-counter col-md-12">{{ post.votes }}</h5>
+          <input class="btn btn-sm btn-light col-md-6 offset-md-3 text-muted" {%
+          if post.vote_code == false %} id="has-voted" {%endif%} type="submit"
+          name="vote_button" value="-1">
+        </form>
         {% endif %}
+        <div class="col-10 post-content">
+          <h3>{{post.title}}</h3>
+          <p>{{post.content}}</p>
+        </div>
+      </div>
     </div>
-    {% if session.username and post %}
-    <form method="POST" action="/posts/{{post.post_id}}/comments">
-    <div class="form-group">
-        <textarea class="form-control" placeholder="Max 100 characters" maxlength="100" name="content"></textarea>
-    </div>
-        <input class="btn btn-primary" type="submit" value="Add comment">
-    </form>
+    {% else %}
+    <p>This post doesn't exist...</p>
+    <a href="/">Back to post listing</a>
     {% endif %}
-    {% for comment in post_comments %}
-    <div class="card border mb-3">
-        <div class="card-body">
-            <p class="card-text">{{comment.content}}
-                
-                {% if comment.created_at != comment.edited_at %}
-                <small class="text-muted">(edited {{comment.edited_at|datetimeformat}})</small>
-                {% endif %}
-            </p>
-        </div>
-        <div class="card-footer">
-            <small class="text-muted">
-                {{comment.created_at|datetimeformat}}
-                <a href="/users/{{comment.user_id}}">{{comment.username}}</a>
-            </small>
-        </div>
+  </div>
+  {% if session.username and post %}
+  <form method="POST" action="/posts/{{post.post_id}}/comments">
+    <div class="form-group">
+      <textarea
+        class="form-control"
+        placeholder="Max 100 characters"
+        maxlength="100"
+        name="content"
+      ></textarea>
     </div>
-    {% endfor %}
-    {% endblock %}
+    <input class="btn btn-primary" type="submit" value="Add comment" />
+  </form>
+  {% endif %} {% for comment in post_comments %}
+  <div class="card border mb-3">
+    <div class="card-body">
+      <p class="card-text">
+        {{comment.content}} {% if comment.created_at != comment.edited_at %}
+        <small class="text-muted"
+          >(edited {{comment.edited_at|datetimeformat}})</small
+        >
+        {% endif %}
+      </p>
+    </div>
+    <div class="card-footer">
+      <small class="text-muted">
+        {{comment.created_at|datetimeformat}}
+        <a href="/users/{{comment.user_id}}">{{comment.username}}</a>
+      </small>
+    </div>
+  </div>
+  {% endfor %} {% endblock %}
 </html>

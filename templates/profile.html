@@ -1,85 +1,96 @@
 {% extends "base.html" %}
 <html>
-    {% block page_content %}
-    <div>
-        {% if profile %}
-        <h2>{{profile.username}}'s profile</h2><br/>
-        <div class="card bg-light mb-3">
-                <div class="card-body">
-                    <p><b>joined</b> {{profile.created_at|datetimeformat}}</p>
-                    <p><b>about</b> {{profile.description}}</p>
-                    <p><b>from</b> {{profile.country}}</p>
-                </div>
-            </div>
-            {% if admin %}
-                <form action="/users/{{session.user_id}}" method="POST">
-                    <div class="form-group">
-                        <label>Description <small>(max 250 characters)</small></label><br/>
-                        <textarea class="form-control" name="description" maxlength="250" placeholder="Who are you?">{{profile.description}}</textarea><br/>
-                        <label>Country</label><br/>
-                        <input class="form-control" type="text" name="country" value="{{profile.country}}" maxlength="50" placeholder="Where are you from?">
-                    </div>
-                    <input class="btn btn-primary" type="submit" value="Update profile">
-                </form>
-            {% endif %}
-            <br/>
-            <h2>{{profile.username}}'s posts</h2>
-            <br/>
-            {% if posts %}
-                {% for post in posts %}
-                <div class="card bg-light mb-3">
-                    <div class="card-header">
-                        <small class="text-muted col-md row">{{post.created_at|datetimeformat}}
-                        </small>
-                    </div>
-                    <div class="card-body">
-                        <h5>{{post.title}}</h5>
-                        <p>{{post.content}}</p>
-                        <div class="row" style="height: 30px;">
-                            <a href="/posts/{{post.post_id}}" class="btn btn-link">
-                                View post
-                            </a>
-                            {%if admin%}
-                            <form action="/edit/post/{{post.post_id}}" method="GET">
-                                <input class="btn btn-link" type="submit" value="Edit post">
-                            </form>
-                            {%endif%}
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            {% else %}
-            <p>No posts to display.</p>
-        {% endif %}
-        <br/>
-        <h2>{{profile.username}}'s comments</h2>
-        <br/>
-        {% if comments %}
-            {% for comment in comments %}
-            <div class="card bg-light mb-3">
-                <div class="card-header">
-                    <small class="text-muted col-md row">{{comment.created_at|datetimeformat}}
-                    </small>
-                </div>
-                <div class="card-body">
-                    <p>{{comment.content}}</p>
-                    <div class="row" style="height: 30px;">
-                        <a href="/posts/{{comment.post_id}}" class="btn btn-link">
-                            View post
-                        </a>
-                        {%if admin%}
-                        <form action="/edit/comment/{{comment.comment_id}}" method="GET">
-                            <input class="btn btn-link" type="submit" value="Edit comment">
-                        </form>
-                        {%endif%}
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        {% else %}
-            <p>No comments to display.</p>
-        {% endif %}
-    {% endif %}
+  {% block page_content %}
+  <div>
+    {% if profile %}
+    <h2>{{profile.username}}'s profile</h2>
+    <br />
+    <div class="card bg-light mb-3">
+      <div class="card-body">
+        <p><b>joined</b> {{profile.created_at|datetimeformat}}</p>
+        <p><b>about</b> {{profile.description}}</p>
+        <p><b>from</b> {{profile.country}}</p>
+      </div>
     </div>
-    {% endblock %}
+    {% if admin %}
+    <form action="/users/{{session.user_id}}" method="POST">
+      <div class="form-group">
+        <label>Description <small>(max 250 characters)</small></label
+        ><br />
+        <textarea
+          class="form-control"
+          name="description"
+          maxlength="250"
+          placeholder="Who are you?"
+        >
+{{profile.description}}</textarea
+        ><br />
+        <label>Country</label><br />
+        <input
+          class="form-control"
+          type="text"
+          name="country"
+          value="{{profile.country}}"
+          maxlength="50"
+          placeholder="Where are you from?"
+        />
+      </div>
+      <input class="btn btn-primary" type="submit" value="Update profile" />
+    </form>
+    {% endif %}
+    <br />
+    <h2>{{profile.username}}'s posts</h2>
+    <br />
+    {% if posts %} {% for post in posts %}
+    <div class="card bg-light mb-3">
+      <div class="card-header">
+        <small class="text-muted col-md row"
+          >{{post.created_at|datetimeformat}}
+        </small>
+      </div>
+      <div class="card-body">
+        <h5>{{post.title}}</h5>
+        <p>{{post.content}}</p>
+        <div class="row" style="height: 30px">
+          <a href="/posts/{{post.post_id}}" class="btn btn-link"> View post </a>
+          {%if admin%}
+          <form action="/edit/post/{{post.post_id}}" method="GET">
+            <input class="btn btn-link" type="submit" value="Edit post" />
+          </form>
+          {%endif%}
+        </div>
+      </div>
+    </div>
+    {% endfor %} {% else %}
+    <p>No posts to display.</p>
+    {% endif %}
+    <br />
+    <h2>{{profile.username}}'s comments</h2>
+    <br />
+    {% if comments %} {% for comment in comments %}
+    <div class="card bg-light mb-3">
+      <div class="card-header">
+        <small class="text-muted col-md row"
+          >{{comment.created_at|datetimeformat}}
+        </small>
+      </div>
+      <div class="card-body">
+        <p>{{comment.content}}</p>
+        <div class="row" style="height: 30px">
+          <a href="/posts/{{comment.post_id}}" class="btn btn-link">
+            View post
+          </a>
+          {%if admin%}
+          <form action="/edit/comment/{{comment.comment_id}}" method="GET">
+            <input class="btn btn-link" type="submit" value="Edit comment" />
+          </form>
+          {%endif%}
+        </div>
+      </div>
+    </div>
+    {% endfor %} {% else %}
+    <p>No comments to display.</p>
+    {% endif %} {% endif %}
+  </div>
+  {% endblock %}
 </html>

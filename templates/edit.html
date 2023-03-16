@@ -1,69 +1,96 @@
 {% extends "base.html" %}
 <html>
-    {% block page_content %}
-    {%if comment%}
-    <h2>Edit comment</h2>
-    <div class="card border mb-3">
-        <div class="card-body">
-            
-            <form method="POST" action="/edit/comment/{{comment.comment_id}}">
-                <div class="form-group">
-                    <input type="hidden" name="method" value="put" />
-                    <label>Content</label><br/>
-                    <input class="form-control" name="content" type="text" minlength="1" maxlength="100" value="{{comment.content}}" required>
-                </div>
-                <input class="btn btn-primary" type="submit" value="Update comment">
-            </form>
+  {% block page_content %} {%if comment%}
+  <h2>Edit comment</h2>
+  <div class="card border mb-3">
+    <div class="card-body">
+      <form method="POST" action="/edit/comment/{{comment.comment_id}}">
+        <div class="form-group">
+          <input type="hidden" name="method" value="put" />
+          <label>Content</label><br />
+          <input
+            class="form-control"
+            name="content"
+            type="text"
+            minlength="1"
+            maxlength="100"
+            value="{{comment.content}}"
+            required
+          />
         </div>
-        <div class="card-footer">
-            <small class="text-muted">
-                {{comment.created_at|datetimeformat}} 
-                {% if comment.created_at != comment.edited_at %}
-                <small class="text-muted">(edited {{comment.edited_at|datetimeformat}})</small>
-                {% endif %}
-                <a href="/users/{{comment.user_id}}">{{comment.username}}</a>
-            </small>
-        </div>
+        <input class="btn btn-primary" type="submit" value="Update comment" />
+      </form>
     </div>
-    <form method="POST" action="/edit/comment/{{comment.comment_id}}">
-            <label>You can delete your comment from this button. Please note that this action cannot be reversed.</label><br/>
-            <input type="hidden" name="method" value="delete" />
-            <input type="submit" class="btn btn-danger"  value="Delete comment">
-    </form>
-    
-    {%endif%}
-    {%if post%}
-    <h2>Edit post</h2><br/>
-    <div class="card bg-light mb-3">
+    <div class="card-footer">
+      <small class="text-muted">
+        {{comment.created_at|datetimeformat}} {% if comment.created_at !=
+        comment.edited_at %}
+        <small class="text-muted"
+          >(edited {{comment.edited_at|datetimeformat}})</small
+        >
+        {% endif %}
+        <a href="/users/{{comment.user_id}}">{{comment.username}}</a>
+      </small>
+    </div>
+  </div>
+  <form method="POST" action="/edit/comment/{{comment.comment_id}}">
+    <label
+      >You can delete your comment from this button. Please note that this
+      action cannot be reversed.</label
+    ><br />
+    <input type="hidden" name="method" value="delete" />
+    <input type="submit" class="btn btn-danger" value="Delete comment" />
+  </form>
 
-        <div class="card-header">
-            <small class="text-muted col-md row">Created: {{post.created_at|datetimeformat}}
-            {% if post.created_at != post.edited_at %}
-            <br/>Edited: {{post.edited_at|datetimeformat}}
-            {% endif %}
-        </small>
+  {%endif%} {%if post%}
+  <h2>Edit post</h2>
+  <br />
+  <div class="card bg-light mb-3">
+    <div class="card-header">
+      <small class="text-muted col-md row"
+        >Created: {{post.created_at|datetimeformat}} {% if post.created_at !=
+        post.edited_at %} <br />Edited: {{post.edited_at|datetimeformat}} {%
+        endif %}
+      </small>
     </div>
     <div class="card-body">
-        <form method="POST" action="/edit/post/{{post.post_id}}">
-            <div class="form-group">
-                <input type="hidden" name="method" value="put" />
-                <label>Title</label>
-                <input class="form-control" name="title" type="text" maxlength="100" minlength="1" value="{{post.title}}" required>
-            </div>
-            <div class="form-group">
-                <label>Content</label>
-                <textarea class="form-control" name="content" maxlength="1000" minlength="1" required>{{post.content}}</textarea>
-            </div>
-            <input class="btn btn-primary" type="submit" value="Update post">
-        </form>
+      <form method="POST" action="/edit/post/{{post.post_id}}">
+        <div class="form-group">
+          <input type="hidden" name="method" value="put" />
+          <label>Title</label>
+          <input
+            class="form-control"
+            name="title"
+            type="text"
+            maxlength="100"
+            minlength="1"
+            value="{{post.title}}"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label>Content</label>
+          <textarea
+            class="form-control"
+            name="content"
+            maxlength="1000"
+            minlength="1"
+            required
+          >
+{{post.content}}</textarea
+          >
+        </div>
+        <input class="btn btn-primary" type="submit" value="Update post" />
+      </form>
     </div>
-</div>
-    <form method="POST" action="/edit/post/{{post.post_id}}">
-        <label>You can delete your post from this button. Please note that this action cannot be reversed.</label><br/>
-        <input type="hidden" name="method" value="delete" />
-        <input type="submit" class="btn btn-danger"  value="Delete post">
-    </form>
-    {%endif%}
-    </div>
-{% endblock %}
+  </div>
+  <form method="POST" action="/edit/post/{{post.post_id}}">
+    <label
+      >You can delete your post from this button. Please note that this action
+      cannot be reversed.</label
+    ><br />
+    <input type="hidden" name="method" value="delete" />
+    <input type="submit" class="btn btn-danger" value="Delete post" />
+  </form>
+  {%endif%} {% endblock %}
 </html>

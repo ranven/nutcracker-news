@@ -1,64 +1,69 @@
 {% extends "base.html" %}
 <html>
-    {% block page_content %}
-    <div>
-        <h2>Filter posts</h2>
-        <form method="get" action="/posts">
-            <div class="form-group">
-                <label>Sort posts by</label>
-                <select class="form-control" name="sort_by">
-                    <option value="new" {%if sort_by=="new"%}selected{%endif%}>New</option>
-                    <option value="old" {%if sort_by=="old"%}selected{%endif%}>Old</option>
-                    <option value="votes" {%if sort_by=="votes"%}selected{%endif%}>Votes</option>
-                    <option value="comments" {%if sort_by=="comments"%}selected{%endif%}>Comments</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Search for posts</label>
-                <input type="text" class="form-control" name="search_term" maxlength="100" placeholder="Insert keyword">
-            </div>
-            <input type="submit" class="btn btn-primary" value="Filter posts">
+  {% block page_content %}
+  <div>
+    <h2>Filter posts</h2>
+    <form method="get" action="/posts">
+      <div class="form-group">
+        <label>Sort posts by</label>
+        <select class="form-control" name="sort_by">
+            <option value="new" {%if sort_by=="new"%}selected{%endif%}>New</option>
+            <option value="old" {%if sort_by=="old"%}selected{%endif%}>Old</option>
+            <option value="votes" {%if sort_by=="votes"%}selected{%endif%}>Votes</option>
+            <option value="comments" {%if sort_by=="comments"%}selected{%endif%}>Comments</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Search for posts</label>
+        <input
+          type="text"
+          class="form-control"
+          name="search_term"
+          maxlength="100"
+          placeholder="Insert keyword"
+        />
+      </div>
+      <input type="submit" class="btn btn-primary" value="Filter posts" />
+    </form>
+    <br />
+    {% if posts %} {% for post in posts %}
+    <div class="card bg-light mb-3">
+      <div class="card-header">
+        <small class="text-muted col-md row"
+          >{{post.created_at|datetimeformat}}</small
+        >
+        <a class="col-md row" href="/users/{{post.user_id}}"
+          >{{post.username}}</a
+        >
+      </div>
+      <div class="row card-body">
+        {% if session.username %}
+        <form class="my-auto col-1" method="post" action="/likes">
+          <input type="hidden" name="post_id" value="{{post.post_id}}" />
+          <input class="btn btn-sm btn-light col-md-6 offset-md-3 text-muted" {%
+          if post.vote_code == true %} id="has-voted" {%endif%} type="submit"
+          name="vote_button" value="+1">
+          <h5 class="upvote-counter col-md-12">{{ post.votes }}</h5>
+          <input class="btn btn-sm btn-light col-md-6 offset-md-3 text-muted" {%
+          if post.vote_code == false %} id="has-voted" {%endif%} type="submit"
+          name="vote_button" value="-1">
         </form>
-        <br/>
-        {% if posts %}
-        {% for post in posts %}
-        <div class="card bg-light mb-3">
-            <div class="card-header">
-                <small class="text-muted col-md row">{{post.created_at|datetimeformat}}</small>
-                <a class="col-md row" href="/users/{{post.user_id}}">{{post.username}}</a>
-            </div>
-            <div class="row card-body">
-                {% if session.username %}
-                <form class="my-auto col-1"  method="post" action="/likes">
-                    <input type="hidden" name="post_id" value="{{post.post_id}}">
-                    <input class="btn btn-sm btn-light col-md-6 offset-md-3 text-muted" {% if post.vote_code == true %} id="has-voted" {%endif%}  type="submit" name="vote_button" value="+1">
-                    <h5 class="upvote-counter col-md-12">{{ post.votes }} </h5>
-                    <input class="btn btn-sm btn-light col-md-6 offset-md-3 text-muted" {% if post.vote_code == false %} id="has-voted" {%endif%}  type="submit" name="vote_button" value="-1">
-            </form>
-            {% endif %}
-            <div class="col-10 post-content">
-                <h3>
-                    {{post.title}}
-                </h3>
-                <p>{{post.content}}</p>
-            </div>
-            </div> 
-            <div class="card-footer">
-                <a href="posts/{{post.post_id}}">
-                    {{post.comment_count}} 
-                    {% if post.comment_count == 1 %} 
-                    comment
-                    {% else %}
-                    comments
-                    {% endif %}
-                </a>
-            </div>     
-        </div>
-        {% endfor %}
-        {% else %}
-        <p>No posts to display.</p>
         {% endif %}
+        <div class="col-10 post-content">
+          <h3>{{post.title}}</h3>
+          <p>{{post.content}}</p>
+        </div>
+      </div>
+      <div class="card-footer">
+        <a href="posts/{{post.post_id}}">
+          {{post.comment_count}} {% if post.comment_count == 1 %} comment {%
+          else %} comments {% endif %}
+        </a>
+      </div>
     </div>
-</div>
-{% endblock %}
+    {% endfor %} {% else %}
+    <p>No posts to display.</p>
+    {% endif %}
+  </div>
+  {% endblock %}
 </html>
