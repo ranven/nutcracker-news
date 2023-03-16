@@ -44,7 +44,14 @@
       action cannot be reversed.</label
     ><br />
     <input type="hidden" name="method" value="delete" />
-    <input type="submit" class="btn btn-danger" value="Delete comment" />
+    <input
+      type="submit"
+      class="btn btn-danger"
+      value="Delete comment"
+      data-toggle="tooltip"
+      data-placement="right"
+      title="Are you sure?"
+    />
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
   </form>
 
@@ -101,7 +108,14 @@
       cannot be reversed.</label
     ><br />
     <input type="hidden" name="method" value="delete" />
-    <input type="submit" class="btn btn-danger" value="Delete post" />
+    <input
+      type="submit"
+      class="btn btn-danger"
+      value="Delete post"
+      data-toggle="tooltip"
+      data-placement="right"
+      title="Are you sure?"
+    />
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
   </form>
   {%endif%} {% endblock %}
