@@ -5,13 +5,14 @@ from services.db import db
 def signup(username, password):
     hash_value = generate_password_hash(password)
 
-    sql = "INSERT INTO users (username, password) VALUES (:username, :password)"
-    db.session.execute(sql, {"username":username, "password":hash_value})
-    db.session.commit()
+    try:
+        sql = "INSERT INTO users (username, password) VALUES (:username, :password)"
+        db.session.execute(sql, {"username":username, "password":hash_value})
+        db.session.commit()
+    except:
+        return False
 
-    if login(username, password):
-        return True
-    return False
+    return login(username, password)
 
 def login(username, password):
     sql = "SELECT user_id, password FROM users WHERE username=:username"

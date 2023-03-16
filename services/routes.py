@@ -39,7 +39,7 @@ def signup():
                 flash("Successfully signed up!")
                 return redirect("/posts") 
             else:
-                flash("An error occurred. Please try again")
+                flash("This username is taken. Please try again")
                 return redirect("/signup")
         else:
             flash("Username or password doesn't match requirements.")
