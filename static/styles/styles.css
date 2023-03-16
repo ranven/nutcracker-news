@@ -17,3 +17,6 @@
   border-radius: 0px;
   margin-right: 4px;
 }
+#has-voted {
+  color: #007bff !important;
+}

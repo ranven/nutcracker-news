@@ -141,11 +141,10 @@ def send_vote():
     authenticated_user = auth.user_id()
     post_id = request.form["post_id"]
     vote_code = True if request.form["vote_button"] == "+1" else False
-    
     if votes.send_vote(authenticated_user, post_id, vote_code):
-        return redirect('/posts') 
+        return redirect('/posts/'+post_id) 
     else:
-        flash("err")
+        flash("Error voting this post.")
         return redirect('/posts')
 
 #edit/delete posts/comments
@@ -191,8 +190,6 @@ def modify_content(content_id, content_type):
                 if comments.delete_comment(content_id, authenticated_user):
                     flash("Comment deleted!")
                     return redirect("/users/"+str(authenticated_user))
-
-#todo: refactor flash messages and error handling, currently buggy
 
 #filter for timestamps
 @app.template_filter('datetimeformat')

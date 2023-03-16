@@ -16,9 +16,9 @@
                 {% if session.username %}
                 <form class="my-auto col-1"  method="post" action="/likes">
                     <input type="hidden" name="post_id" value="{{post.post_id}}">
-                    <input class="btn btn-sm btn-light col-md-6 offset-md-3 text-muted" type="submit" name="vote_button" value="+1">
+                    <input class="btn btn-sm btn-light col-md-6 offset-md-3 text-muted" {% if post.vote_code == true %} id="has-voted" {%endif%} type="submit" name="vote_button" value="+1">
                     <h5 class="upvote-counter col-md-12">{{ post.votes }} </h5>
-                    <input class="btn btn-sm btn-light col-md-6 offset-md-3 text-muted" type="submit" name="vote_button" value="-1">
+                    <input class="btn btn-sm btn-light col-md-6 offset-md-3 text-muted" {% if post.vote_code == false %} id="has-voted" {%endif%} type="submit" name="vote_button" value="-1">
             </form>
             {% endif %}
             <div class="col-10 post-content">
