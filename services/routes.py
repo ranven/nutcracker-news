@@ -18,13 +18,12 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
         
-        if helpers.validate_length(username, "username"):
-            if auth.login(username, password):
-                flash("Login successful!")
-                return redirect("/posts")
-            else:
-                flash("Invalid password or username.")
-                redirect("/login")
+        if helpers.validate_length(username, "username") and auth.login(username, password):
+            flash("Login successful!")
+            return redirect("/posts")
+        else:
+            flash("Invalid password or username.")
+            return redirect("/login")
 
 @app.route("/signup", methods=["POST", "GET"])
 def signup():
@@ -196,3 +195,6 @@ def modify_content(content_id, content_type):
 def datetime_format(value, format="%-d %b / %H:%M"):
     return value.strftime(format)
 
+@app.errorhandler(404)
+def not_found(e):
+    return render_template('error.html', code=404 ,err="This page does not exist :(")
