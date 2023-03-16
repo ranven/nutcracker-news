@@ -1,5 +1,5 @@
 from app import app
-from flask import flash
+from flask import abort, flash, session
 from flask import render_template, request, redirect
 import services.auth as auth
 import services.posts as posts
@@ -75,6 +75,8 @@ def post():
         return render_template("posts.html", posts=all_posts, sort_by=sort_param)
 
     if request.method == "POST":
+        if session["csrf_token"] != request.form["csrf_token"]:
+            abort(403)
         title = request.form["title"]
         content = request.form["content"]
         if helpers.validate_length(title, "post_title") and helpers.validate_length(content, "post_content"):
@@ -106,6 +108,8 @@ def create_post():
 
 @app.route("/posts/<post_id>/comments", methods=["POST"])
 def send_comment(post_id):
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
     authenticated_user = auth.user_id()
     content = request.form["content"]
     if helpers.validate_length(content, "comment_content"):
@@ -136,6 +140,8 @@ def profile(user_id):
         return render_template("profile.html", profile=profile, posts=users_posts, comments=users_comments, admin=is_admin)
 
     if request.method == "POST":
+        if session["csrf_token"] != request.form["csrf_token"]:
+            abort(403)
         if is_admin:
             description = request.form["description"]
             country = request.form["country"]
@@ -154,6 +160,8 @@ def profile(user_id):
 
 @app.route("/likes", methods=["POST"])
 def send_vote():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
     authenticated_user = auth.user_id()
     post_id = request.form["post_id"]
     vote_code = True if request.form["vote_button"] == "+1" else False
@@ -177,6 +185,8 @@ def modify_content(content_id, content_type):
             return render_template("edit.html", comment=comment, post=None)
 
     elif request.method == "POST":
+        if session["csrf_token"] != request.form["csrf_token"]:
+            abort(403)
         authenticated_user = auth.user_id()
         method = request.form["method"]
         match (content_type, method):
@@ -211,12 +221,14 @@ def modify_content(content_id, content_type):
 
 # filter for timestamps
 
-
 @app.template_filter('datetimeformat')
 def datetime_format(value, format="%-d %b / %H:%M"):
     return value.strftime(format)
 
-
 @app.errorhandler(404)
 def not_found():
     return render_template('error.html', code=404, err="This page does not exist :(")
+
+@app.errorhandler(403)
+def forbidden():
+    return render_template('error.html', code=403, err="You do not have the rights to perform this action")

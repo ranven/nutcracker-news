@@ -47,6 +47,11 @@
           <input class="btn btn-sm btn-light col-md-6 offset-md-3 text-muted" {%
           if post.vote_code == false %} id="has-voted" {%endif%} type="submit"
           name="vote_button" value="-1">
+          <input
+          type="hidden"
+          name="csrf_token"
+          value="{{ session.csrf_token }}"
+        />
         </form>
         {% endif %}
         <div class="col-10 post-content">

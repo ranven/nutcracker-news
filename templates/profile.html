@@ -36,6 +36,7 @@
         />
       </div>
       <input class="btn btn-primary" type="submit" value="Update profile" />
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     </form>
     {% endif %}
     <br />
