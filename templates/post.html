@@ -1,49 +1,69 @@
 {% extends "base.html" %}
 <html>
   {% block page_content %}
-  <div>
-    {% if post %}
-    <div class="card bg-light mb-3">
-      <div class="card-header">
-        <small class="text-muted col-md row"
-          >Created: {{post.created_at|datetimeformat}} {% if post.created_at !=
-          post.edited_at %} <br />Edited: {{post.edited_at|datetimeformat}} {%
-          endif %}
-        </small>
-        <a class="col-md row" href="/users/{{post.user_id}}"
-          >{{post.username}}</a
+  <a href="/posts">&larr; Back to front page</a>
+  <br /><br />
+  {% if post %}
+  <div class="card bg-light mb-3">
+    <div class="card-header">
+      <small class="text-muted col-md row"
+        >Created: {{post.created_at|datetimeformat}} {% if post.created_at !=
+        post.edited_at %} <br />Edited: {{post.edited_at|datetimeformat}} {%
+        endif %}
+      </small>
+      <a class="col-md row" href="/users/{{post.user_id}}">{{post.username}}</a>
+    </div>
+    <div class="row card-body">
+      {% if session.username %}
+      <form class="my-auto col-1" method="post" action="/likes">
+        <input type="hidden" name="post_id" value="{{post.post_id}}" />
+        <input class="btn btn-sm btn-light col-md-6 offset-md-3 text-muted" {%
+        if post.vote_code == true %} id="has-voted" {%endif%} type="submit"
+        name="vote_button" value="+1">
+        <h5 class="upvote-counter col-md-12">{{ post.votes }}</h5>
+        <input class="btn btn-sm btn-light col-md-6 offset-md-3 text-muted" {%
+        if post.vote_code == false %} id="has-voted" {%endif%} type="submit"
+        name="vote_button" value="-1">
+        <input
+          type="hidden"
+          name="csrf_token"
+          value="{{ session.csrf_token }}"
+        />
+      </form>
+      {% else %}
+      <div
+        class="my-auto col-1"
+        data-toggle="tooltip"
+        data-placement="top"
+        title="Log in to vote!"
+      >
+        <button
+          class="btn btn-sm btn-light col-md-6 offset-md-3 text-muted"
+          name="vote_button"
+          disabled
         >
+          +1
+        </button>
+        <h5 class="upvote-counter col-md-12">{{ post.votes }}</h5>
+        <button
+          class="btn btn-sm btn-light col-md-6 offset-md-3 text-muted"
+          name="vote_button"
+          disabled
+        >
+          -1
+        </button>
       </div>
-      <div class="row card-body">
-        {% if session.username %}
-        <form class="my-auto col-1" method="post" action="/likes">
-          <input type="hidden" name="post_id" value="{{post.post_id}}" />
-          <input class="btn btn-sm btn-light col-md-6 offset-md-3 text-muted" {%
-          if post.vote_code == true %} id="has-voted" {%endif%} type="submit"
-          name="vote_button" value="+1">
-          <h5 class="upvote-counter col-md-12">{{ post.votes }}</h5>
-          <input class="btn btn-sm btn-light col-md-6 offset-md-3 text-muted" {%
-          if post.vote_code == false %} id="has-voted" {%endif%} type="submit"
-          name="vote_button" value="-1">
-          <input
-            type="hidden"
-            name="csrf_token"
-            value="{{ session.csrf_token }}"
-          />
-        </form>
-        {% endif %}
-        <div class="col-10 post-content">
-          <h3>{{post.title}}</h3>
-          <p>{{post.content}}</p>
-        </div>
+      {% endif %}
+      <div class="col-10 post-content">
+        <h3>{{post.title}}</h3>
+        <p>{{post.content}}</p>
       </div>
     </div>
-    {% else %}
-    <p>This post doesn't exist...</p>
-    <a href="/">Back to post listing</a>
-    {% endif %}
   </div>
-  {% if session.username and post %}
+  {% else %}
+  <p>This post doesn't exist...</p>
+  <a href="/">Back to post listing</a>
+  {% endif %} {% if session.username and post %}
   <form method="POST" action="/posts/{{post.post_id}}/comments">
     <div class="form-group">
       <textarea

@@ -53,6 +53,20 @@
           value="{{ session.csrf_token }}"
         />
         </form>
+        {% else %}
+        <div class="my-auto col-1" data-toggle="tooltip" data-placement="top" title="Log in to vote!">
+          <button
+            class="btn btn-sm btn-light col-md-6 offset-md-3 text-muted"
+            name="vote_button"
+            disabled
+            >+1</button>
+          <h5 class="upvote-counter col-md-12">{{ post.votes }}</h5>
+          <button
+            class="btn btn-sm btn-light col-md-6 offset-md-3 text-muted"
+            name="vote_button"
+            disabled
+            >-1</button>
+        </div>
         {% endif %}
         <div class="col-10 post-content">
           <h3>{{post.title}}</h3>
@@ -72,3 +86,4 @@
   </div>
   {% endblock %}
 </html>
+

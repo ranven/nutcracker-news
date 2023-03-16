@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS votes(
 CREATE TABLE IF NOT EXISTS profiles(
 	profile_id SERIAL PRIMARY KEY,
 	user_id SERIAL REFERENCES users(user_id) ON DELETE SET NULL,
-	description TEXT NOT NULL DEFAULT '',
+	description TEXT NOT NULL DEFAULT 'unknown',
 	country TEXT DEFAULT 'unknown',
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
