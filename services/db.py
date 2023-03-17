@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from os import getenv
 from sqlalchemy import text
 
-app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DB_URL")
+app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DB_URL").replace("://", "ql://", 1)
 db = SQLAlchemy(app)
 
 file = open('schema.sql', 'r')
