@@ -225,10 +225,20 @@ def modify_content(content_id, content_type):
 def datetime_format(value, format="%-d %b / %H:%M"):
     return value.strftime(format)
 
+# error handlers
+
+@app.errorhandler(401)
+def forbidden():
+    return render_template('error.html', code=401, err="Unauthorized – you do not have the rights to perform this action.")
+
+@app.errorhandler(403)
+def forbidden():
+    return render_template('error.html', code=403, err="Forbidden – you do not have the rights to perform this action.")
+
 @app.errorhandler(404)
 def not_found():
     return render_template('error.html', code=404, err="This page does not exist :(")
 
-@app.errorhandler(403)
-def forbidden():
-    return render_template('error.html', code=403, err="You do not have the rights to perform this action")
+@app.errorhandler(500)
+def server_error():
+    return render_template('error.html', code=500, err="An error occurred. Please try again.")
