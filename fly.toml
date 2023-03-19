@@ -8,6 +8,10 @@ processes = []
 
 [build]
   builder = "paketobuildpacks/builder:base"
+  buildpack = ["paketo-buildpacks/python"]
+
+[build.args]
+  BP_CPYTHON_VERSION = "3.10.9"
 
 [env]
   PORT = "5000"
