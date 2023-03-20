@@ -70,9 +70,12 @@ def post():
         else:
             sort_param = "new"
             search_term = ""
-        all_posts = posts.get_all_posts(
-            authenticated_user, sort_param, search_term)
-        return render_template("posts.html", posts=all_posts, sort_by=sort_param)
+        try:
+            all_posts = posts.get_all_posts(
+                authenticated_user, sort_param, search_term)
+            return render_template("posts.html", posts=all_posts, sort_by=sort_param)
+        except:
+            abort(500)
 
     if request.method == "POST":
         if session["csrf_token"] != request.form["csrf_token"]:
@@ -242,3 +245,7 @@ def not_found():
 @app.errorhandler(500)
 def server_error():
     return render_template('error.html', code=500, err="An error occurred. Please try again.")
+
+@app.errorhandler(Exception)
+def exception_err(e):
+    return render_template('error.html', code=500, err=repr(e))

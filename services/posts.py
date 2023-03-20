@@ -26,9 +26,13 @@ def get_all_posts(user_id, sort_param, search_term):
     sql += get_order_clause(sort_param)
     # add where-clause to sql statement
     sql = sql.replace('search', get_search_clause(search_term))
-    result = db.session.execute(sql, {"user_id": user_id, "search_term": search_term})
-    posts = result.fetchall()
-    return posts
+    try:
+        result = db.session.execute(sql, {"user_id": user_id, "search_term": search_term})
+        posts = result.fetchall()
+        return posts
+    except:
+        db.session.close()
+        return []
 
 def get_post(user_id, post_id):
     if user_id == 0:
@@ -50,9 +54,13 @@ def get_post(user_id, post_id):
         WHERE p.post_id = :post_id
         GROUP BY(p.post_id, u.user_id, p.created_at)
         """
-    result = db.session.execute(sql, {"user_id":user_id, "post_id": post_id})
-    post = result.fetchone()
-    return post
+    try: 
+        result = db.session.execute(sql, {"user_id":user_id, "post_id": post_id})
+        post = result.fetchone()
+        return post
+    except:
+        db.session.close()
+        return ()
 
 def get_users_posts(user_id):
     sql = "SELECT title, content, created_at, post_id FROM posts WHERE user_id = :user_id ORDER BY created_at DESC"
